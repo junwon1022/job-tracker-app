@@ -3,7 +3,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config');
-const authRoutes = require('./routes/routes');
+const authRoutes = require('./routes/authRoutes');
+const jobRoutes = require('./routes/jobRoutes');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -22,7 +23,8 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // API Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes); // ✅ Authentication API
+app.use('/api/jobs', jobRoutes); // ✅ Jobs API
 
 // Define a basic route to check if the API is running
 app.get('/', (req, res) => {
