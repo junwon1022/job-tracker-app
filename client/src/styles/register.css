@@ -1,23 +1,13 @@
-/* Apply background to the entire page */
-body {
-  background-color: #f4f4f4;
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f4f4f4;
-}
-
-.login-form {
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+  
+.register-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -27,14 +17,14 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-form input {
+.register-form input {
   padding: 10px;
   width: 250px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-.login-form button {
+.register-form button {
   padding: 10px;
   background-color: #646cff;
   color: white;
@@ -43,23 +33,22 @@ body {
   border-radius: 5px;
 }
 
-.login-form button:hover {
+.register-form button:hover {
   background-color: #535bf2;
 }
 
-
-.register-text {
+.login-text {
   margin-top: 10px;
   font-size: 14px;
   color: #555;
 }
 
-.register-link {
+.login-link {
   color: #646cff;
   text-decoration: none;
   font-weight: bold;
 }
 
-.register-link:hover {
+.login-link:hover {
   text-decoration: underline;
 }
