@@ -17,8 +17,8 @@ const app = (0, express_1.default)();
 // Middleware to parse JSON request bodies
 app.use(express_1.default.json());
 app.use(cors());
-// Define the port number (default: 5000)
-const PORT = Number(process.env.PORT) || 5000;
+// Define the port number (default: 5001)
+const PORT = Number(process.env.PORT) || 5001;
 // Connect to MongoDB
 connectDB();
 // API Routes

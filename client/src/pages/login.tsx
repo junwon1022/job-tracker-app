@@ -7,10 +7,35 @@
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
-      localStorage.setItem("token", "dummy_token"); // Simulating login
-      navigate("/dashboard");
+      try {
+        const response = await fetch("http://localhost:5001/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+  
+        if (!response.ok) {
+          // The server returned an error status (like 400)
+          const errorData = await response.json();
+          alert(errorData.msg || "Login failed");
+          return;
+        }
+  
+        // Login successful; parse the JSON response
+        const data = await response.json();
+        console.log("Login success:", data);
+  
+        // data.token will contain the JWT. Store it somewhere (e.g., localStorage).
+        localStorage.setItem("token", data.token);
+  
+        // Now navigate to the dashboard
+        navigate("/dashboard");
+      } catch (err) {
+        console.error("Login error:", err);
+        alert("Something went wrong. Please try again.");
+      }
     };
 
     return (
