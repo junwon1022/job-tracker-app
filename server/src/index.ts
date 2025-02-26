@@ -1,10 +1,11 @@
 // Import framework and variables
-const express = require('express');
+import express, { Application } from "express";
+import authRoutes from "./routes/authRoutes";
+import jobRoutes from "./routes/jobRoutes";
+
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config');
-const authRoutes = require('./routes/authRoutes');
-const jobRoutes = require('./routes/jobRoutes');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
  // Define the port number (default: 5000)
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 // Connect to MongoDB
 connectDB();

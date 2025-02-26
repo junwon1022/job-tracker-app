@@ -1,14 +1,18 @@
-const mongoose = require('mongoose');
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Import shortid
 const shortid = require('shortid');
-
-const JobSchema = new mongoose.Schema({
+const mongoose_1 = __importDefault(require("mongoose"));
+const JobSchema = new mongoose_1.default.Schema({
     _id: {
         type: String,
         default: shortid.generate // Generate a shorter unique ID
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'User'
     },
     company: {
@@ -29,5 +33,4 @@ const JobSchema = new mongoose.Schema({
         default: Date.now
     }
 });
-
-module.exports = mongoose.model('Job', JobSchema);
+exports.default = mongoose_1.default.model("Job", JobSchema);
