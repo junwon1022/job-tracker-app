@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
  // Define the port number (default: 5000)
-const PORT = Number(process.env.PORT) || 5000;
+const PORT = Number(process.env.PORT) || 5001;
 
 // Connect to MongoDB
 connectDB();
