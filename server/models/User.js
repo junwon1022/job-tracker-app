@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
+const shortid = require('shortid');
 
 // Define the User Schema (Database Structure)
 const UserSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: shortid.generate // Generate a shorter unique ID
+    },
     name: {
         type: String,
         required: true
