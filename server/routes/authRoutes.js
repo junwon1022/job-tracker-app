@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User'); // Import User model
+const authMiddleware = require('../middleware/authMiddleware');
 
 
 const router = express.Router();
@@ -80,6 +81,17 @@ router.post('/login', [
 
         res.json({ token });
 
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// Retrieving the list of users
+router.get('/users', authMiddleware, async (req, res) => {
+    try {
+        const users = await User.find().select('-password');
+        res.json(users);
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Server Error');
