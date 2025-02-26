@@ -15,9 +15,12 @@ const app = express();
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5174',
+    credentials: true, // Cookie handling
+  }));
 
- // Define the port number (default: 5000)
+ // Define the port number (default: 5001)
 const PORT = Number(process.env.PORT) || 5001;
 
 // Connect to MongoDB

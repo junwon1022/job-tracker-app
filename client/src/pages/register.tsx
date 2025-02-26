@@ -8,15 +8,33 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Simulating registration (replace with actual API call)
-    const user = { name, email, password };
-    console.log("User registered:", user);
+    try {
+      const response = await fetch("http://localhost:5001/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    // Redirect to login page
-    navigate("/");
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Registration failed", errorData);
+        alert(`Registration failed: ${errorData.msg || "Unknown error"}`);
+        return;
+      }
+
+      // If successful, the server will typically return a token
+      const data = await response.json();
+      console.log("User registered:", data);
+
+      // Once registered, redirect to login
+      navigate("/");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong during registration.");
+    }
   };
 
   return (
