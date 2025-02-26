@@ -1,26 +1,31 @@
+// Import framework and variables
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const connectDB = require('./config');
 
+// Load environment variables from .env file
 dotenv.config();
+
+// Initialize an Express application
 const app = express();
 
-// Middleware
+// Middleware to parse JSON request bodies
 app.use(express.json());
 app.use(cors());
 
+ // Define the port number (default: 5000)
 const PORT = process.env.PORT || 5000;
 
+// Connect to MongoDB
+connectDB();
+
+// Define a basic route to check if the API is running
 app.get('/', (req, res) => {
     res.send('Job Tracker API is running...');
 });
 
+// Start the server and listen on the specified port
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
-
-const connectDB = require('./config');
-
-dotenv.config();
-connectDB();
