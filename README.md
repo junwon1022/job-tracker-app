@@ -7,7 +7,7 @@ The project is designed to be **scalable, modern, and developer-friendly**.
 
 ## 🚀 Why This Tech Stack?
 ### **1️⃣ Backend: Node.js + Express.js**
-✅ **JavaScript Everywhere**: Using **Node.js** allows us to write JavaScript for both **frontend and backend**, making full-stack development more seamless.\
+✅ **TypeScript Everywhere**: Using **Node.js** allows us to write TypeScript for both **frontend and backend**, making full-stack development more seamless.\
 ✅ **Fast & Asynchronous**: Node.js uses a **non-blocking, event-driven architecture**, making it **highly efficient** for handling multiple user requests simultaneously.\
 ✅ **Scalability**: Express.js is lightweight and **flexible**, perfect for building **RESTful APIs** with minimal boilerplate code.\
 ✅ **Community & Ecosystem**: With **npm**, we have access to thousands of packages, including **authentication (jsonwebtoken), security (bcryptjs), and database management (mongoose)**.
