@@ -54,11 +54,21 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       
-      <div className="welcome-box">
-        <img src={userIcon} alt="User Icon" className="user-icon" />
-        <p className="name">{name}</p>
-        <button onClick={handleLogout} className="logout-button">Sign out</button>
+      <div className="navbar">
+        <div className="navbar-left">
+          <h2 className="app-title">Job Tracker</h2>
+        </div>
+        <div className="navbar-right">
+          <img src={userIcon} alt="User Icon" className="user-icon" />
+          <p className="name">{name}</p>
+          <button onClick={handleLogout} className="logout-button">Sign out</button>
+        </div>
       </div>
+
+      <div>
+        <button className="add-job-button">+ Add Job</button>
+      </div>
+      
 
       <h2>Job List</h2>
       <ul className="job-list">
