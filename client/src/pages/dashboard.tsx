@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/api";  // Ensure correct API import
 import "../styles/App.css"; 
+import userIcon from "../assets/user.png";
 
 // Define the expected type for your data
 interface Job {
@@ -14,13 +15,19 @@ interface Job {
 const Dashboard = () => {
   // Define correct type
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [name, setName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const storedName = localStorage.getItem("userName");
+
     if (!token) {
       navigate("/");
     } else {
+      if (storedName) {
+        setName(storedName);
+      }
       fetchJobs();
     }
   }, []);
@@ -36,6 +43,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      
+      <div className="welcome-box">
+      <img src={userIcon} alt="User Icon" className="user-icon" />
+        <p>{name}</p>
+      </div>
       <h2>Job List</h2>
       <ul className="job-list">
         {jobs.length === 0 ? (

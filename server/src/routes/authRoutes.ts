@@ -45,7 +45,12 @@
             });
       
             // Return the token (or any other info you want)
-            res.json({ token });
+            res.json({ token,
+              user: {
+                name: user.name,
+                email: user.email
+              }
+            });
           } catch (err) {
             console.error(err);
             res.status(500).send("Server error");
@@ -96,7 +101,13 @@
                 const payload = { user: { id: user.id } };
                 const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 
-                res.json({ token });
+                res.json({ 
+                  token,
+                  user: {
+                    name: user.name,
+                    email: user.email
+                  }
+                });
             } catch (error) {
                 res.status(500).send("Server Error");
             }
