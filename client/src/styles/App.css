@@ -43,27 +43,37 @@
 
 /* The small welcome box in the top-right corner */
 .welcome-box {
-  position: absolute; 
-  top: 20px;    /* adjust as needed */
-  right: 20px;  /* adjust as needed */
-  
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  display: flex; 
+  align-items: center; 
   background-color: #ffffff; 
-  padding: 0.1rem 1rem;
+  padding: 4px 4px; 
   border: 2px solid #ccc;
   border-radius: 8px;
-
-  /* Drop shadow */
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-
-  /* Make text a bit smaller if you like */
-  font-size: 0.9rem;
+  font-size: 12px;
 }
 
 .user-icon {
-  position: absolute;
-  top: 15px;
-  right: 120px;
-  width: 24px;
+  width: 24px; 
   height: 24px;
-  margin-right: 8px; /* spacing between icon and text */
+  margin-right: 8px;
+}
+
+.logout-button {
+  background-color: #000000;
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.name {
+  display: inline-block;
+  border: 1px solid #8a8a8a;
+  padding: 0.25rem 0.5rem; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border-radius: 4px; 
+  margin-right: 1rem;
 }

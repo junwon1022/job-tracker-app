@@ -32,6 +32,16 @@ const Dashboard = () => {
     }
   }, []);
 
+
+  const handleLogout = () => {
+    // Remove authentication data from localStorage (or wherever you store it)
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+
+    // Redirect to the login page
+    navigate("/");
+  };
+
   const fetchJobs = async () => {
     try {
       const res = await api.get<Job[]>("/jobs");
@@ -45,9 +55,11 @@ const Dashboard = () => {
     <div className="dashboard-container">
       
       <div className="welcome-box">
-      <img src={userIcon} alt="User Icon" className="user-icon" />
-        <p>{name}</p>
+        <img src={userIcon} alt="User Icon" className="user-icon" />
+        <p className="name">{name}</p>
+        <button onClick={handleLogout} className="logout-button">Sign out</button>
       </div>
+
       <h2>Job List</h2>
       <ul className="job-list">
         {jobs.length === 0 ? (
