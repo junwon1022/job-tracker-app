@@ -41,6 +41,126 @@
   color: #888;
 }
 
+
+/*-----------------------------------------------------------------------------*/
+/* Dashboar Container*/
+.dashboard-container {
+  padding: 60px 20px;
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+}
+
+/* Centering and spacing for Add Job Button */
+.add-job-container {
+  margin: 20px 0;
+}
+
+/* Add job button */
+.add-job-button {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Hover effect for add job button */
+.add-job-button:hover {
+  background-color: #333;
+}
+
+/* Job Form*/
+.job-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-top: 50px;
+}
+
+.job-form input,
+.job-form select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.save-job-button {
+  background-color: #008000;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-job-button:hover {
+  background-color: #006600;
+}
+
+/* Job Stats */
+.job-stats {
+  text-align: left;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.job-stats ul {
+  list-style: none;
+  padding: 0;
+}
+
+.job-stats li {
+  padding: 4px 0;
+}
+
+/* Filter & Sorting */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-button {
+  background: #e0e0e0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background: #d0d0d0;
+}
+
+.sort-dropdown {
+  padding: 8px;
+  border-radius: 4px;
+}
+
+/* Job List Section */
+.job-list-header {
+  margin-top: 30px;
+}
+
+.job-list {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.job-list p {
+  font-size: 14px;
+  color: #666;
+}
+
 /* The top navbar */
 .navbar {
   position: fixed;
