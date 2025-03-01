@@ -219,19 +219,19 @@
   transition: background 0.2s ease-in-out;
 }
 
-{/* Logout button hover effect */}
+/* Logout button hover effect */
 .logout-button:hover {
   background-color: #333;
 }
 
-{/* User Dropdown */}
+/* User Dropdown */
 .user-dropdown {
   position: relative;
   display: inline-block;
   cursor: pointer;
 }
 
-{/* Dropdown menu */}
+/* Dropdown menu */
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -245,7 +245,7 @@
   z-index: 100;
 }
 
-{/* Dropdown items */}
+/* Dropdown items */
 .dropdown-item {
   display: block;
   width: 100%;
@@ -258,7 +258,7 @@
   transition: background 0.2s;
 }
 
-{/* Dropdown items hover effect*/}
+/* Dropdown items hover effect*/
 .dropdown-item:hover {
   background: #f1f1f1;
 }
