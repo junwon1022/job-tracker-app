@@ -75,11 +75,11 @@ const Dashboard = () => {
             {/* Dropdown menu */}
             {isDropdownOpen && (
               <div className="dropdown-menu">
-                <button className="dropdown-item">Profile</button>
-                <button className="dropdown-item">Settings</button>
-                <button className="dropdown-item">Friends</button>
+                <button className="dropdown-item" onClick={() => navigate("../dropdown/profile")}>Profile</button>
+                <button className="dropdown-item" onClick={() => navigate("../dropdown/settings")}> Settings </button>
+                <button className="dropdown-item" onClick={() => navigate("../dropdown/friends")}>Friends</button>
                 <hr />
-                {/* Logout button */}
+                {/* Logout button*/}
                 <button className="dropdown-item logout" onClick={handleLogout}>Sign out</button>
               </div>
             )}
