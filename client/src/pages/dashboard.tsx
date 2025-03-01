@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") || userIcon); 
   const [filter, setFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("date");
   const [displayedJobs, setDisplayedJobs] = useState<Job[]>([]);
@@ -66,7 +67,9 @@ const Dashboard = () => {
 
         {/* The navigation bar on the right side (contains user info dropdown)*/}
         <div className="navbar-right">
-          <img src={userIcon} alt="User Icon" className="user-icon" />
+          <label htmlFor="profile-upload" className="user-icon-container">
+            <img src={profilePic} alt="User Icon" className="user-icon" />
+          </label>
           <div className="user-dropdown">
             {/* Displays user name*/}
             <p className="name" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
