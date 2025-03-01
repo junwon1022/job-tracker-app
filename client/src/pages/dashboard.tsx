@@ -16,6 +16,7 @@ const Dashboard = () => {
   // Define correct type
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("date");
   const [displayedJobs, setDisplayedJobs] = useState<Job[]>([]);
@@ -62,10 +63,27 @@ const Dashboard = () => {
         <div className="navbar-left">
           <h2 className="app-title">Job Tracker</h2>
         </div>
+
+        {/* The navigation bar on the right side (contains user info dropdown)*/}
         <div className="navbar-right">
           <img src={userIcon} alt="User Icon" className="user-icon" />
-          <p className="name">{name}</p>
-          <button onClick={handleLogout} className="logout-button">Sign out</button>
+          <div className="user-dropdown">
+            {/* Displays user name*/}
+            <p className="name" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {name} ▼
+            </p>
+            {/* Dropdown menu */}
+            {isDropdownOpen && (
+              <div className="dropdown-menu">
+                <button className="dropdown-item">Profile</button>
+                <button className="dropdown-item">Settings</button>
+                <button className="dropdown-item">Friends</button>
+                <hr />
+                {/* Logout button */}
+                <button className="dropdown-item logout" onClick={handleLogout}>Sign out</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

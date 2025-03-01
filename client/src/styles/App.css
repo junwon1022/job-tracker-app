@@ -219,6 +219,60 @@
   transition: background 0.2s ease-in-out;
 }
 
+{/* Logout button hover effect */}
 .logout-button:hover {
   background-color: #333;
+}
+
+{/* User Dropdown */}
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+{/* Dropdown menu */}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  min-width: 150px;
+  z-index: 100;
+}
+
+{/* Dropdown items */}
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+{/* Dropdown items hover effect*/}
+.dropdown-item:hover {
+  background: #f1f1f1;
+}
+
+.dropdown-menu hr {
+  border: 0.5px solid #ddd;
+  margin: 8px 0;
+}
+
+.dropdown-item.logout {
+  color: red;
+  font-weight: bold;
+}
+
+.dropdown-item.logout:hover {
+  background: #ffe6e6;
 }
