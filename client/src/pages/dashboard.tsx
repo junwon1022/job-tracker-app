@@ -37,7 +37,7 @@ const Dashboard = () => {
     }
   });
 
-
+  // Handles logout
   const handleLogout = () => {
     // Remove authentication data from localStorage (or wherever you store it)
     localStorage.removeItem("token");
@@ -45,6 +45,23 @@ const Dashboard = () => {
 
     // Redirect to the login page
     navigate("/");
+  };
+
+  // Handles profile picture change
+  const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]; 
+    if (file) {
+      const reader = new FileReader();
+      
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          setProfilePic(reader.result);
+          localStorage.setItem("profilePic", reader.result);
+        }
+      };
+  
+      reader.readAsDataURL(file);
+    }
   };
 
   const fetchJobs = async () => {
@@ -67,9 +84,17 @@ const Dashboard = () => {
 
         {/* The navigation bar on the right side (contains user info dropdown)*/}
         <div className="navbar-right">
+          {/* Profile Picture */}
           <label htmlFor="profile-upload" className="user-icon-container">
             <img src={profilePic} alt="User Icon" className="user-icon" />
           </label>
+          <input
+            type="file"
+            id="profile-upload"
+            accept="image/*"
+            onChange={handleProfilePicChange}
+            style={{ display: "none" }}
+          />
           <div className="user-dropdown">
             {/* Displays user name*/}
             <p className="name" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
