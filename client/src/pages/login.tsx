@@ -29,6 +29,7 @@
   
         // data.token will contain the JWT. Store it somewhere (e.g., localStorage).
         localStorage.setItem("userName", data.user.name);
+        localStorage.setItem("userId", data.user.id);
         localStorage.setItem("token", data.token);
   
         // Now navigate to the dashboard
