@@ -79,14 +79,13 @@ const Dashboard = () => {
       {/* The navigation bar */}
       <div className="navbar">
         <div className="navbar-left">
-          <h2 className="app-title">Job Tracker</h2>
+          <button className="main-button" onClick={() => navigate("../dashboard")}>Job Tracker</button>
         </div>
-
         {/* The navigation bar on the right side (contains user info dropdown)*/}
         <div className="navbar-right">
           {/* Profile Picture */}
           <label htmlFor="profile-upload" className="user-icon-container">
-            <img src={profilePic} alt="User Icon" className="user-icon" />
+            <img src={profilePic} alt="User Icon" className="user-icon"/>
           </label>
           <input
             type="file"
