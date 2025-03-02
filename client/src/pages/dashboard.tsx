@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api/api";  // Ensure correct API import
 import "../styles/App.css"; 
 import userIcon from "../assets/user.png";
+import Navbar from "./navbar";
 
 // Define the expected type for your data
 interface Job {
@@ -78,40 +79,7 @@ const Dashboard = () => {
 
       {/* The navigation bar */}
       <div className="navbar">
-        <div className="navbar-left">
-          <button className="main-button" onClick={() => navigate("../dashboard")}>Job Tracker</button>
-        </div>
-        {/* The navigation bar on the right side (contains user info dropdown)*/}
-        <div className="navbar-right">
-          {/* Profile Picture */}
-          <label htmlFor="profile-upload" className="user-icon-container">
-            <img src={profilePic} alt="User Icon" className="user-icon"/>
-          </label>
-          <input
-            type="file"
-            id="profile-upload"
-            accept="image/*"
-            onChange={handleProfilePicChange}
-            style={{ display: "none" }}
-          />
-          <div className="user-dropdown">
-            {/* Displays user name*/}
-            <p className="name" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-              {name} ▼
-            </p>
-            {/* Dropdown menu */}
-            {isDropdownOpen && (
-              <div className="dropdown-menu">
-                <button className="dropdown-item" onClick={() => navigate("../dropdown/profile")}>Profile</button>
-                <button className="dropdown-item" onClick={() => navigate("../dropdown/settings")}> Settings </button>
-                <button className="dropdown-item" onClick={() => navigate("../dropdown/friends")}>Friends</button>
-                <hr />
-                {/* Logout button*/}
-                <button className="dropdown-item logout" onClick={handleLogout}>Sign out</button>
-              </div>
-            )}
-          </div>
-        </div>
+        <Navbar /> 
       </div>
 
       {/* Add job button */}
