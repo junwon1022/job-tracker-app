@@ -70,7 +70,10 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
-    localStorage.removeItem("profilePic"); // Ensure profilePic is removed on logout
+  
+    setProfilePic(userIcon); // Reset profile pic to default
+    setName("User"); // Reset name to default
+  
     navigate("/");
   };
 
