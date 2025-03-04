@@ -17,11 +17,8 @@ const Dashboard = () => {
   // Define correct type
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") || userIcon); 
-  const [filter, setFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("date");
-  const [displayedJobs, setDisplayedJobs] = useState<Job[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
