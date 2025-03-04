@@ -72,10 +72,6 @@ const Navbar = () => {
 
   // Handle Logout
   const handleLogout = () => {
-    // const storedName = localStorage.getItem("userName");
-    // if (storedName) {
-    //   localStorage.removeItem(`profilePic_${storedName}`);
-    // }
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
     navigate("/");
