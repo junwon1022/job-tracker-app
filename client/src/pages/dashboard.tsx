@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api/api";  // Ensure correct API import
 import "../styles/App.css"; 
 import userIcon from "../assets/user.png";
+import Navbar from "./navbar";
 
 // Define the expected type for your data
 interface Job {
@@ -16,6 +17,11 @@ const Dashboard = () => {
   // Define correct type
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") || userIcon); 
+  const [filter, setFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("date");
+  const [displayedJobs, setDisplayedJobs] = useState<Job[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,9 +36,9 @@ const Dashboard = () => {
       }
       fetchJobs();
     }
-  }, []);
+  });
 
-
+  // Handles logout
   const handleLogout = () => {
     // Remove authentication data from localStorage (or wherever you store it)
     localStorage.removeItem("token");
@@ -40,6 +46,23 @@ const Dashboard = () => {
 
     // Redirect to the login page
     navigate("/");
+  };
+
+  // Handles profile picture change
+  const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]; 
+    if (file) {
+      const reader = new FileReader();
+      
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          setProfilePic(reader.result);
+          localStorage.setItem("profilePic", reader.result);
+        }
+      };
+  
+      reader.readAsDataURL(file);
+    }
   };
 
   const fetchJobs = async () => {
@@ -53,36 +76,59 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      
+
+      {/* The navigation bar */}
       <div className="navbar">
-        <div className="navbar-left">
-          <h2 className="app-title">Job Tracker</h2>
-        </div>
-        <div className="navbar-right">
-          <img src={userIcon} alt="User Icon" className="user-icon" />
-          <p className="name">{name}</p>
-          <button onClick={handleLogout} className="logout-button">Sign out</button>
-        </div>
+        <Navbar /> 
       </div>
 
-      <div>
+      {/* Add job button */}
+      <div className="add-job-container">
         <button className="add-job-button">+ Add Job</button>
       </div>
-      
 
-      <h2>Job List</h2>
-      <ul className="job-list">
-        {jobs.length === 0 ? (
-          <p>No jobs found.</p>
-        ) : (
-          jobs.map((job) => (
-            <li key={job._id} className="job-item">
-              <h3>{job.position} at {job.company}</h3>
-              <p>Status: {job.status}</p>
-            </li>
-          ))
-        )}
-      </ul>
+      {/* Job form */}
+      <div className="job-form">
+        <input type="text" placeholder="Job Title" />
+        <input type="text" placeholder="Company" />
+        <select>
+          <option value="applied">Applied</option>
+          <option value="interview">Interview</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <button className="save-job-button">Save</button>
+      </div>
+
+      {/* Job stats */}
+      <div className="job-stats">
+        <h3>Job Application Stats</h3>
+        <ul>
+          <li><strong>Total Jobs:</strong> 0</li>
+          <li><strong>Interviews Scheduled:</strong> 0</li>
+          <li><strong>Rejected:</strong> 0</li>
+        </ul>
+      </div>
+
+      {/* Filter container */}
+      <div className="filter-container">
+        <button className="filter-button">All</button>
+        <button className="filter-button">Applied</button>
+        <button className="filter-button">Interview</button>
+        <button className="filter-button">Rejected</button>
+
+        {/* Sorting the jobs */}
+        <select className="sort-dropdown" onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="date">Newest First</option>
+          <option value="alpha">A-Z</option>
+        </select>
+      </div>
+      
+      
+      <h2 className="job-list-header">Job List</h2>
+      <div className="job-list">
+        <p>No jobs found. Start tracking your applications!</p>
+        <button className="add-job-button">+ Add Your First Job</button>
+      </div>
     </div>
   );
 };
