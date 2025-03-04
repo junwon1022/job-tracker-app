@@ -1,23 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../api/api";  // Ensure correct API import
+import { api } from "../api/api"; 
 import "../styles/App.css"; 
-import userIcon from "../assets/user.png";
 import Navbar from "./navbar";
 
 // Define the expected type for your data
 interface Job {
-  _id: string;
-  position: string;
+  _id: String;
   company: string;
+  position: string;
   status: string;
+  createdAt: Date;
 }
 
 const Dashboard = () => {
   // Define correct type
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
-  const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") || userIcon); 
   const [sortOrder, setSortOrder] = useState("date");
   const navigate = useNavigate();
 
@@ -33,34 +32,7 @@ const Dashboard = () => {
       }
       fetchJobs();
     }
-  });
-
-  // Handles logout
-  const handleLogout = () => {
-    // Remove authentication data from localStorage (or wherever you store it)
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
-
-    // Redirect to the login page
-    navigate("/");
-  };
-
-  // Handles profile picture change
-  const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; 
-    if (file) {
-      const reader = new FileReader();
-      
-      reader.onloadend = () => {
-        if (typeof reader.result === "string") {
-          setProfilePic(reader.result);
-          localStorage.setItem("profilePic", reader.result);
-        }
-      };
-  
-      reader.readAsDataURL(file);
-    }
-  };
+  }, []);
 
   const fetchJobs = async () => {
     try {
@@ -70,6 +42,16 @@ const Dashboard = () => {
       console.error("Error fetching jobs:", error);
     }
   };
+
+  // Sort jobs based on sortOrder
+  const sortedJobs = [...jobs].sort((a, b) => {
+    if (sortOrder === "date") {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    } else if (sortOrder === "alpha") {
+      return a.position.localeCompare(b.position);
+    }
+    return 0;
+  });
 
   return (
     <div className="dashboard-container">
