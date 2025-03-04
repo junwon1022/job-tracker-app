@@ -11,14 +11,13 @@ const Navbar = () => {
 
   // Load profile pic and user name when component mounts
   useEffect(() => {
-    const storedProfilePic = localStorage.getItem("profilePic");
     const storedName = localStorage.getItem("userName");
-
-    if (storedProfilePic) {
-      setProfilePic(storedProfilePic);
-    }
     if (storedName) {
       setName(storedName);
+      const storedProfilePic = localStorage.getItem(`profilePic_${storedName}`);
+      if (storedProfilePic) {
+        setProfilePic(storedProfilePic);
+      }
     }
   }, []);
 
@@ -26,7 +25,7 @@ const Navbar = () => {
   const resizeAndStoreImage = (file: File) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    
+  
     reader.onload = (event) => {
       const img = new Image();
       img.src = event.target?.result as string;
@@ -35,12 +34,11 @@ const Navbar = () => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
   
-        const maxWidth = 200; // Set max width (Adjust as needed)
-        const maxHeight = 200; // Set max height (Adjust as needed)
+        const maxWidth = 200;
+        const maxHeight = 200;
         let width = img.width;
         let height = img.height;
   
-        // Scale down the image while maintaining aspect ratio
         if (width > maxWidth || height > maxHeight) {
           const aspectRatio = width / height;
           if (width > height) {
@@ -57,23 +55,29 @@ const Navbar = () => {
   
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
-          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7); // 70% quality
-          localStorage.setItem("profilePic", compressedDataUrl);
-          setProfilePic(compressedDataUrl);
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
+  
+          // Store image with the username as a key
+          const storedName = localStorage.getItem("userName");
+          if (storedName) {
+            localStorage.setItem(`profilePic_${storedName}`, compressedDataUrl);
+            setProfilePic(compressedDataUrl);
+          }
         }
       };
     };
   };
   
+  
 
   // Handle Logout
   const handleLogout = () => {
+    // const storedName = localStorage.getItem("userName");
+    // if (storedName) {
+    //   localStorage.removeItem(`profilePic_${storedName}`);
+    // }
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
-  
-    setProfilePic(userIcon); // Reset profile pic to default
-    setName("User"); // Reset name to default
-  
     navigate("/");
   };
 
