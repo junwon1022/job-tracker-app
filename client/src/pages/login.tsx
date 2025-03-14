@@ -26,14 +26,11 @@
         console.log("Login success:", data);
         console.log("User object:", data.user);
 
-        const userId = data.user._id || data.user.id; // Some APIs return `_id`, others return `id`
+        const userId = data.user._id || data.user.id;
         if (!userId) {
           throw new Error("Invalid user data received: Missing user ID");
         }
-
-        
-    
-        // ✅ Ensure `userId` is correctly stored in `localStorage`
+        // Ensure `userId` is correctly stored in `localStorage`
         if (data.user && data.user.id) {
           localStorage.setItem("userId", data.user.id);
           localStorage.setItem("userName", data.user.name);
@@ -42,15 +39,13 @@
           throw new Error("Invalid user data received: Missing user ID");
         }
         
+        // Navigate to the dashboard
         navigate("/dashboard");
       } catch (err) {
         console.error("Login error:", err);
         alert("Something went wrong. Please try again.");
       }
     };
-    
-    
-    
 
     return (
       <div className="login-container">
