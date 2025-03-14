@@ -17,10 +17,9 @@ The project is designed to be **scalable, modern, and developer-friendly**.
 ✅ **Scalability & Performance**: Suitable for high-speed data access and scaling applications.\
 ✅ **Mongoose ORM**: Provides an easy way to structure data and enforce validation rules, making interactions with MongoDB more robust.
 
-### **3️⃣ Frontend: React.js (Vite + Tailwind CSS)**
+### **3️⃣ Frontend: React.js (Vite)**
 ✅ **Component-Based Architecture**: React makes it easy to **reuse components** and **manage state** efficiently.\
 ✅ **Vite for Performance**: Instead of **Create React App**, we use **Vite**, which offers **faster builds and hot module replacement**.\
-✅ **Tailwind CSS for Styling**: Instead of traditional CSS, **Tailwind** speeds up UI development with **utility-first styling**.\
 ✅ **React Router**: Enables seamless **page navigation** between login, register, and dashboard pages.
 
 ### **4️⃣ Authentication: JWT (JSON Web Token)**
@@ -28,9 +27,7 @@ The project is designed to be **scalable, modern, and developer-friendly**.
 ✅ **Secure**: Passwords are hashed using **bcrypt.js**, and tokens are signed using **JWT_SECRET** to prevent unauthorized access.\
 ✅ **Easy API Integration**: Tokens can be sent in **HTTP headers**, making it easy to use with frontend clients like React.
 
-### **5️⃣ Deployment (Optional)**
-✅ **Backend Hosting**: Deployed using **Render/Railway/Heroku** for easy backend scaling.\
-✅ **Frontend Hosting**: Hosted on **Vercel/Netlify**, allowing fast deployments with CI/CD support.\
+### **5️⃣ Deployment**
 ✅ **Database**: MongoDB Atlas ensures a **cloud-hosted database**, eliminating the need for local database setup.
 
 ---
@@ -76,12 +73,7 @@ JWT_SECRET=your_secret_key
 ## 📌 API Endpoints
 | Method | Endpoint | Description |
 |--------|---------|-------------|
-| POST | `/api/auth/register` | Register a new user |
-| POST | `/api/auth/login` | User login (returns JWT token) |
-| GET | `/api/jobs` | Get all jobs for logged-in user |
-| POST | `/api/jobs` | Add a new job application |
-| PUT | `/api/jobs/:id` | Update a job status |
-| DELETE | `/api/jobs/:id` | Delete a job |
+
 
 ---
 
@@ -95,7 +87,6 @@ JWT_SECRET=your_secret_key
 
 ## 🙌 Contributing
 Contributions are welcome! Feel free to submit **issues** or **pull requests**.
-
 ---
 
 ## 📄 License
