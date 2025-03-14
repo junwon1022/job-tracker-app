@@ -23,13 +23,12 @@ const Dashboard = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedName = localStorage.getItem("userName");
-    const storedUserId = localStorage.getItem("userId");
 
     if (!token) {
       navigate("/");
     } else {
-      if (storedUserId) {
-        setName(storedUserId);
+      if (storedName) {
+        setName(storedName);
       } 
       fetchJobs();
     }
@@ -37,7 +36,15 @@ const Dashboard = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await api.get<Job[]>("/jobs");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found. User might not be logged in.");
+      }
+  
+      const res = await api.get<Job[]>("/jobs", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
       setJobs(res.data);
     } catch (error) {
       console.error("Error fetching jobs:", error);
