@@ -23,13 +23,14 @@ const Dashboard = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedName = localStorage.getItem("userName");
+    const storedUserId = localStorage.getItem("userId");
 
     if (!token) {
       navigate("/");
     } else {
-      if (storedName) {
-        setName(storedName);
-      }
+      if (storedUserId) {
+        setName(storedUserId);
+      } 
       fetchJobs();
     }
   }, []);

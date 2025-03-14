@@ -11,10 +11,10 @@ const Navbar = () => {
 
   // Load profile pic and user name when component mounts
   useEffect(() => {
-    const storedName = localStorage.getItem("userName");
-    if (storedName) {
-      setName(storedName);
-      const storedProfilePic = localStorage.getItem(`profilePic_${storedName}`);
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setName(localStorage.getItem("userName") || "User");
+      const storedProfilePic = localStorage.getItem(`profilePic_${storedUserId}`);
       if (storedProfilePic) {
         setProfilePic(storedProfilePic);
       }
@@ -58,9 +58,9 @@ const Navbar = () => {
           const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
   
           // Store image with the username as a key
-          const storedName = localStorage.getItem("userName");
-          if (storedName) {
-            localStorage.setItem(`profilePic_${storedName}`, compressedDataUrl);
+          const storedUserId = localStorage.getItem("userId");
+          if (storedUserId) {
+            localStorage.setItem(`profilePic_${storedUserId}`, compressedDataUrl);
             setProfilePic(compressedDataUrl);
           }
         }
