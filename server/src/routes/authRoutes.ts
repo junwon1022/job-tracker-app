@@ -47,6 +47,7 @@
             // Return the token (or any other info you want)
             res.json({ token,
               user: {
+                id: user._id,
                 name: user.name,
                 email: user.email
               }
@@ -58,7 +59,28 @@
         }
       );
 
-    // 📌 Get All Users
+      // ✅ GET a user by ID
+      router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
+        try {
+          const user = await User.findById(req.params.id).exec(); 
+          if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+          }
+      
+          res.json({
+            id: user.id.toString(),
+            name: user.name,
+            email: user.email,
+            profilePic: user.profilePic || null, // Include profile picture
+          });
+        } catch (error) {
+          console.error("Error fetching user:", error);
+          res.status(500).json({ message: "Server error" });
+        }
+      });
+
+    // Get All Users
     router.get("/", async (req, res) => {
         try {
           const users = await User.find().select("-password");
@@ -69,7 +91,7 @@
         }
     });
 
-    // 📌 User Registration
+    // User Registration
     router.post(
         "/register",
         [
