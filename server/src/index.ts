@@ -30,8 +30,8 @@ connectDB();
 
 // API Routes
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use('/api/auth', authRoutes); // ✅ Authentication API
-app.use('/api/jobs', jobRoutes); // ✅ Jobs API
+app.use('/api/auth', authRoutes); // Authentication API
+app.use('/api/jobs', jobRoutes); // Jobs API
 app.use('/api/profile', profileRoutes); // Profile API
 
 // Define a basic route to check if the API is running
