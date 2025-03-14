@@ -15,24 +15,31 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
         });
-  
+    
         if (!response.ok) {
-          // The server returned an error status (like 400)
           const errorData = await response.json();
           alert(errorData.msg || "Login failed");
           return;
         }
-  
-        // Login successful; parse the JSON response
+    
         const data = await response.json();
         console.log("Login success:", data);
-  
-        // token, user name, user id passed on in a local storage
-        localStorage.setItem("userName", data.user.name);
-        localStorage.setItem("userId", data.user.id);
-        localStorage.setItem("token", data.token);
-  
-        // Now navigate to the dashboard
+        console.log("User object:", data.user);
+
+        const userId = data.user._id || data.user.id;
+        if (!userId) {
+          throw new Error("Invalid user data received: Missing user ID");
+        }
+        // Ensure `userId` is correctly stored in `localStorage`
+        if (data.user && data.user.id) {
+          localStorage.setItem("userId", data.user.id);
+          localStorage.setItem("userName", data.user.name);
+          localStorage.setItem("token", data.token);
+        } else {
+          throw new Error("Invalid user data received: Missing user ID");
+        }
+        
+        // Navigate to the dashboard
         navigate("/dashboard");
       } catch (err) {
         console.error("Login error:", err);

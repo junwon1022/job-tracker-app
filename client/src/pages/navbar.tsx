@@ -11,14 +11,37 @@ const Navbar = () => {
 
   // Load profile pic and user name when component mounts
   useEffect(() => {
-    const storedName = localStorage.getItem("userName");
-    if (storedName) {
-      setName(storedName);
-      const storedProfilePic = localStorage.getItem(`profilePic_${storedName}`);
-      if (storedProfilePic) {
-        setProfilePic(storedProfilePic);
+    const fetchUserData = async () => {
+      const storedUserId = localStorage.getItem("userId");
+  
+      if (!storedUserId) {
+        console.error("No valid userId found in localStorage");
+        return;
       }
-    }
+  
+      try {
+        console.log(`Fetching user data from: http://localhost:5001/api/auth/users/${storedUserId}`);
+        
+        // Avoid fetching again if data is already stored
+        if (name !== "User") return; // Prevents unnecessary re-fetches
+  
+        const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`);
+  
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user data: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log("Fetched user data:", data);
+  
+        setName(data.name);
+        setProfilePic(data.profilePic ? `http://localhost:5001${data.profilePic}` : userIcon);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
   }, []);
 
   // Profile picture resizing function
@@ -58,18 +81,16 @@ const Navbar = () => {
           const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
   
           // Store image with the username as a key
-          const storedName = localStorage.getItem("userName");
-          if (storedName) {
-            localStorage.setItem(`profilePic_${storedName}`, compressedDataUrl);
-            setProfilePic(compressedDataUrl);
+          const storedUserId = localStorage.getItem("userId");
+          if (storedUserId) {
+              localStorage.setItem(`profilePic_${storedUserId}`, compressedDataUrl);
+              setProfilePic(compressedDataUrl);
           }
         }
       };
     };
   };
   
-  
-
   // Handle Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -78,13 +99,41 @@ const Navbar = () => {
   };
 
   // Handle Profile Picture Change
-  const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfilePicChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      resizeAndStoreImage(file); // Call the compression function
+    if (!file) return;
+  
+    const storedUserId = localStorage.getItem("userId");
+    if (!storedUserId) {
+      console.error("No valid userId found");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", storedUserId); 
+  
+    try {
+      const response = await fetch("http://localhost:5001/api/profile/upload-profile-pic", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to upload image: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      if (data.profilePic) {
+        const newProfilePic = `http://localhost:5001${data.profilePic}`;
+        setProfilePic(newProfilePic); // Update UI immediately
+      }
+  
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
     }
   };
-  
+
 
   return (
     <div className="navbar">
