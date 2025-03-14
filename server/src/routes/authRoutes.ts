@@ -3,8 +3,18 @@
     import jwt from "jsonwebtoken";
     import { body, validationResult } from "express-validator";
     import User from "../models/User";
+    import multer from "multer";
 
     const router = express.Router();
+
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, "uploads/"); // Save files to an "uploads" folder
+      },
+      filename: (req, file, cb) => {
+        cb(null, `${Date.now()}_${file.originalname}`);
+      },
+    });
 
     router.post(
         "/login",
