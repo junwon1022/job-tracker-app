@@ -59,10 +59,6 @@
         }
       );
 
-      
-
-    
-
     // User Registration
     router.post(
         "/register",
@@ -107,7 +103,7 @@
             }
         }
     );
-    
+
 
     // Get All Users
     router.get("/", async (req, res) => {
@@ -168,6 +164,22 @@
       } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).json({ message: "Server error" });
+      }
+    });
+
+    // Delete a user by ID
+    router.delete("/users/:id", async (req: Request, res: Response): Promise<void> => {
+      try{
+        const userId = req.params.id;
+        const deletedUser = await User.findByIdAndDelete(userId);
+
+        if(!deletedUser){
+          res.status(404).json({ message: "User not found" });
+          return;
+        }
+      } catch(error){
+        console.error("Error deleting user:", error);
+        res.status(500).json({message: "Server error"});
       }
     });
 
