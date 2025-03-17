@@ -59,37 +59,9 @@
         }
       );
 
-      // ✅ GET a user by ID
-      router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
-        try {
-          const user = await User.findById(req.params.id).exec(); 
-          if (!user) {
-            res.status(404).json({ message: "User not found" });
-            return;
-          }
       
-          res.json({
-            id: user.id.toString(),
-            name: user.name,
-            email: user.email,
-            profilePic: user.profilePic || null, // Include profile picture
-          });
-        } catch (error) {
-          console.error("Error fetching user:", error);
-          res.status(500).json({ message: "Server error" });
-        }
-      });
 
-    // Get All Users
-    router.get("/", async (req, res) => {
-        try {
-          const users = await User.find().select("-password");
-          res.json(users);
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ msg: "Server Error" });
-        }
-    });
+    
 
     // User Registration
     router.post(
@@ -135,6 +107,70 @@
             }
         }
     );
+    
+
+    // Get All Users
+    router.get("/", async (req, res) => {
+      try {
+        const users = await User.find().select("-password");
+        res.json(users);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Server Error" });
+      }
+  });
+
+
+    // GET a user by ID
+    router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
+      try {
+        const user = await User.findById(req.params.id).exec(); 
+        if (!user) {
+          res.status(404).json({ message: "User not found" });
+          return;
+        }
+    
+        res.json({
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
+          profilePic: user.profilePic || null, // Include profile picture
+        });
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ message: "Server error" });
+      }
+    });
+
+    // PUT a user by ID
+    router.put("/users/:id", async (req: Request, res: Response): Promise<void> => {
+      try {
+        const { name, email } = req.body;
+
+        // Find user by ID and update
+        const updatedUser = await User.findByIdAndUpdate(
+          req.params.id,
+          { name, email },
+          { new: true }
+        );
+
+        if (!updatedUser) {
+          res.status(404).json({ message: "User not found" });
+          return;
+        }
+
+        res.json({
+          id: updatedUser.id.toString(),
+          name: updatedUser.name,
+          email: updatedUser.email,
+          profilePic: updatedUser.profilePic || null,
+        });
+      } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ message: "Server error" });
+      }
+    });
+
 
 
     export default router;
