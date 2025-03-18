@@ -1,61 +1,92 @@
-.settings-container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 40px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    text-align: center;
-  }
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-  .settings-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding-top: 900px; 
-  }
-  
-  h2, h3 {
-    margin-bottom: 20px;
-    color: #333;
-    font-weight: 600;
-  }
-  
-  label {
-    display: block;
-    margin: 15px 0 5px;
-    font-weight: bold;
-    text-align: left;
-  }
-  
-  input, select {
-    width: calc(100% - 20px);
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-  }
-  
-  input[type="checkbox"] {
-    width: auto;
-    margin-right: 8px;
-  }
-  
-  .save-button {
-    width: 100%;
-    padding: 14px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .save-button:hover {
-    background-color: #0056b3;
-  }
-  
+.settings-container {
+  flex: 1;
+  padding: 20px;
+}
+
+.settings-page {
+  display: flex;
+  height: 100vh;
+}
+
+.settings-sidebar {
+  position: fixed; 
+  top: 50px;
+  left: 0;
+  width: 20%;
+  height: 100vh;
+  padding: 20px;
+  background: #f8f9fa;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.settings-sidebar h3 {
+  margin-bottom: 10px;
+}
+
+.settings-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.settings-sidebar li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.settings-sidebar li.active {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+
+
+h2, h3 {
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+label {
+  display: block;
+  margin: 15px 0 5px;
+  font-weight: bold;
+  text-align: left;
+}
+
+input, select {
+  width: calc(100% - 20px);
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+}
+
+.save-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.save-button:hover {
+  background-color: #0056b3;
+}

@@ -3,6 +3,10 @@ import Navbar from "../navbar";
 import "../../styles/dropdown/settings.css";
 
 const Settings = () => {
+  // Controls which section is displayed
+  const [selectedSection, setSelectedSection] = useState("user-info"); 
+
+  // User Information States
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
@@ -11,8 +15,12 @@ const Settings = () => {
   const [addressStreet, setAddressStreet] = useState("");
   const [addressHouseNr, setAddressHouseNr] = useState("");
   const [postcode, setPostcode] = useState("");
+
+  // CV Upload State
   const [cv, setCv] = useState<File | null>(null);
-  const [uploadedCv, setUploadedCv] = useState<string | null>(null); // Track existing CV
+  const [uploadedCv, setUploadedCv] = useState<string | null>(null);
+
+  // Preferences States
   const [notifications, setNotifications] = useState(false);
   const [theme, setTheme] = useState("light");
   
@@ -104,102 +112,114 @@ const Settings = () => {
   return (
     <div>
       <Navbar />
-      <div className= "settings-page">
+      <div className="settings-page">
+        {/* Sidebar */}
+        <div className="settings-sidebar">
+          <h3>Settings</h3>
+          <ul>
+            <li onClick={() => setSelectedSection("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
+              User Information
+            </li>
+            <li onClick={() => setSelectedSection("password")} className={selectedSection === "password" ? "active" : ""}>
+              Change Password
+            </li>
+            <li onClick={() => setSelectedSection("cv-upload")} className={selectedSection === "cv-upload" ? "active" : ""}>
+              Upload CV
+            </li>
+            <li onClick={() => setSelectedSection("preferences")} className={selectedSection === "preferences" ? "active" : ""}>
+              Preferences
+            </li>
+            <li onClick={() => setSelectedSection("delete-account")} className={selectedSection === "delete-account" ? "active" : ""}>
+              Delete Account
+            </li>
+          </ul>
+        </div>
+
+        {/* Settings Container */}
         <div className="settings-container">
-          <h2>Account Settings</h2>
-          <label>Username:</label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
-          />
+          {selectedSection === "user-info" && (
+            <>
+              <h2>User Information</h2>
+              <label>Username:</label>
+              <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
 
-          <label>Email:</label>
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-          />
+              <label>Email:</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-          <label>Birthday:</label>
-          <input 
-            type="date"
-            value={birthday}
-            onChange={(e) => setBirthday(e.target.value)}
-          />
+              <label>Birthday:</label>
+              <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
 
-          <label>Phone:</label>
-          <input
-            type="text"
-            value={phone} 
-            onChange={(e) => setPhone(e.target.value)} 
-          />
+              <label>Phone:</label>
+              <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
 
-          <label>City:</label>
-          <input type="text"
-            value={addressCity}
-            onChange={(e) => setAddressCity(e.target.value)}
-          />
+              <label>City:</label>
+              <input type="text" value={addressCity} onChange={(e) => setAddressCity(e.target.value)} />
 
-          <label>Street:</label>
-          <input
-            type="text"
-            value={addressStreet}
-            onChange={(e) => 
-            setAddressStreet(e.target.value)} 
-          />
+              <label>Street:</label>
+              <input type="text" value={addressStreet} onChange={(e) => setAddressStreet(e.target.value)} />
 
-          <label>House Number:</label>
-          <input type="text" 
-            value={addressHouseNr}
-            onChange={(e) => setAddressHouseNr(e.target.value)}
-          />
+              <label>House Number:</label>
+              <input type="text" value={addressHouseNr} onChange={(e) => setAddressHouseNr(e.target.value)} />
 
-          <label>Postcode:</label>
-          <input
-            type="text"
-            value={postcode}
-            onChange={(e) => setPostcode(e.target.value)}
-          />
-
-          <label>Upload CV:</label>
-          <input
-            type="file"
-            accept=".pdf,.docx"
-            onChange={(e) => setCv(e.target.files?.[0] || null)}
-          />
-
-          
-          {uploadedCv && (
-            <p>
-              Current CV:&nbsp;
-              <a 
-                href={`http://localhost:5001${uploadedCv}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                {decodeURIComponent(uploadedCv.split("/").pop()?.replace(/^\d+-/, "") || "View CV")}
-              </a>
-            </p>
+              <label>Postcode:</label>
+              <input type="text" value={postcode} onChange={(e) => setPostcode(e.target.value)} />
+            </>
           )}
 
-          <h3>Preferences</h3>
-          <label>
-            <input 
-              type="checkbox" 
-              checked={notifications} 
-              onChange={() => setNotifications(!notifications)}
-            />
-            Enable Notifications
-          </label>
+          {selectedSection === "password" && (
+            <>
+              <h2>Change Password</h2>
+              <label>Current Password:</label>
+              <input type="password" placeholder="Enter current password" />
 
-          <label>Theme:</label>
-          <select value={theme} onChange={(e) => setTheme(e.target.value)}>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
+              <label>New Password:</label>
+              <input type="password" placeholder="Enter new password" />
+
+              <label>Confirm New Password:</label>
+              <input type="password" placeholder="Confirm new password" />
+            </>
+          )}
+
+          {selectedSection === "cv-upload" && (
+            <>
+              <h2>Upload CV</h2>
+              <label>Choose File:</label>
+              <input type="file" accept=".pdf,.docx" onChange={(e) => setCv(e.target.files?.[0] || null)} />
+
+              {uploadedCv && (
+                <p>
+                  Current CV:&nbsp;
+                  <a href={`http://localhost:5001${uploadedCv}`} target="_blank" rel="noopener noreferrer">
+                    {decodeURIComponent(uploadedCv.split("/").pop()?.replace(/^\d+-/, "") || "View CV")}
+                  </a>
+                </p>
+              )}
+            </>
+          )}
+
+          {selectedSection === "preferences" && (
+            <>
+              <h2>Preferences</h2>
+              <label>
+                <input type="checkbox" checked={notifications} onChange={() => setNotifications(!notifications)} />
+                Enable Notifications
+              </label>
+
+              <label>Theme:</label>
+              <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </>
+          )}
+
+          {selectedSection === "delete-account" && (
+            <>
+              <h2>Delete Account</h2>
+              <p><strong>Warning:</strong> This action is irreversible. Proceed with caution.</p>
+              <button className="delete-button">Delete My Account</button>
+            </>
+          )}
 
           <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
         </div>
