@@ -21,9 +21,6 @@ const Navbar = () => {
   
       try {
         console.log(`Fetching user data from: http://localhost:5001/api/auth/users/${storedUserId}`);
-        
-        // Avoid fetching again if data is already stored
-        if (name !== "User") return; // Prevents unnecessary re-fetches
   
         const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`);
   
@@ -36,12 +33,22 @@ const Navbar = () => {
   
         setName(data.name);
         setProfilePic(data.profilePic ? `http://localhost:5001${data.profilePic}` : userIcon);
+
+        localStorage.setItem("userName", data.name);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
   
     fetchUserData();
+
+    // Listen for localStorage updates (triggered from settings page)
+    const handleStorageChange = () => {
+      setName(localStorage.getItem("userName") || "User");
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   // Profile picture resizing function

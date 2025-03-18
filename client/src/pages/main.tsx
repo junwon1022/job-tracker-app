@@ -10,7 +10,5 @@ import App from './App'
 
 // Mount the React app inside the root div in index.html
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
     <App />
-  </StrictMode>,
 )
