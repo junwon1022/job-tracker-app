@@ -20,15 +20,34 @@ const Settings = () => {
     if (storedEmail) setEmail(storedEmail);
   }, []);
   
-  const handleSaveSettings = () => {
+  const handleSaveSettings = async () => {
     try {
+      const storedUserId = localStorage.getItem("userId");
+
+      if (!storedUserId) {
+        alert("No user ID found!");
+        return;
+      }
+
+       // Save new name to the database
+      const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: username, email }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update user in backend: ${response.status}`);
+      }
+
+      console.log("Backend updated successfully!");
+
+
       localStorage.setItem("userName", username);
       localStorage.setItem("userEmail", email);
-      setStoredName(username);
       
       window.dispatchEvent(new Event("storage"));
       
-      console.log("Settings saved:", { username, email, notifications, theme });
       alert("Settings updated successfully!");
     } catch (error) {
       alert("Failed to update settings.");
