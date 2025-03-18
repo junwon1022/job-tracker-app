@@ -5,6 +5,13 @@ import "../../styles/dropdown/settings.css";
 const Settings = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [phone, setPhone] = useState("");
+  const [addressCity, setAddressCity] = useState("");
+  const [addressStreet, setAddressStreet] = useState("");
+  const [addressHouseNr, setAddressHouseNr] = useState("");
+  const [postcode, setPostcode] = useState("");
+  const [cv, setCv] = useState<File | null>(null);
   const [notifications, setNotifications] = useState(false);
   const [theme, setTheme] = useState("light");
   
@@ -31,6 +38,12 @@ const Settings = () => {
 
         setUsername(data.name);
         setEmail(data.email);
+        setBirthday(data.birthday || "");
+        setPhone(data.phone || "");
+        setAddressCity(data.address?.city || "");
+        setAddressStreet(data.address?.street || "");
+        setAddressHouseNr(data.address?.houseNr || "");
+        setPostcode(data.address?.postcode || "");
 
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -96,6 +109,54 @@ const Settings = () => {
           value={email} 
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
+        />
+
+        <label>Birthday:</label>
+        <input 
+          type="date"
+          value={birthday}
+          onChange={(e) => setBirthday(e.target.value)}
+        />
+
+        <label>Phone:</label>
+        <input
+          type="text"
+          value={phone} 
+          onChange={(e) => setPhone(e.target.value)} 
+        />
+
+        <label>City:</label>
+        <input type="text"
+          value={addressCity}
+          onChange={(e) => setAddressCity(e.target.value)}
+        />
+
+        <label>Street:</label>
+        <input
+          type="text"
+          value={addressStreet}
+          onChange={(e) => 
+          setAddressStreet(e.target.value)} 
+        />
+
+        <label>House Number:</label>
+        <input type="text" 
+          value={addressHouseNr}
+          onChange={(e) => setAddressHouseNr(e.target.value)}
+        />
+
+        <label>Postcode:</label>
+        <input
+          type="text"
+          value={postcode}
+          onChange={(e) => setPostcode(e.target.value)}
+        />
+
+        <label>Upload CV:</label>
+        <input
+          type="file"
+          accept=".pdf,.docx"
+          onChange={(e) => setCv(e.target.files?.[0] || null)}
         />
 
         <h3>Preferences</h3>
