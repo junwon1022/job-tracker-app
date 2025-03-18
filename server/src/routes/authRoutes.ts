@@ -2,19 +2,31 @@
     import multer from "multer";
     import bcrypt from "bcryptjs";
     import jwt from "jsonwebtoken";
+    import fs from "fs";
+    import path from "path";
     import { body, validationResult } from "express-validator";
     import User from "../models/User";
 
     const router = express.Router();
 
+    // Define the absolute path for the uploads directory
+    const uploadDir = path.join(__dirname, "..", "uploads", "cvs");
 
-    // Set up storage for CV uploads
+    // Ensure directory exists before saving files
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    // Configure Multer storage
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
-          cb(null, "uploads/cvs/"); // Save files in "uploads/cvs" directory
+        console.log(`Saving file to: ${uploadDir}`);
+        cb(null, uploadDir);
       },
       filename: (req, file, cb) => {
-          cb(null, Date.now() + "-" + file.originalname); // Unique filename
+        const timestamp = Date.now();
+        const safeFilename = file.originalname.replace(/\s+/g, "_"); // Replace spaces with underscores
+        cb(null, `${timestamp}-${safeFilename}`);
       },
     });
 
@@ -164,49 +176,46 @@
     // PUT a user by ID
     router.put("/users/:id", upload.single("cv"), async (req: Request, res: Response): Promise<void> => {
       try {
-        const { name, email, birthday, phone, address_city, address_street, address_house_nr, postcode, cv } = req.body;
-
-        // Ensure all fields are structured properly
-        const updatedData: any = {
-          name,
-          email,
-          birthday,
-          phone,
-          address: {
-            city: address_city || "",
-            street: address_street || "",
-            houseNr: address_house_nr || "",
-            postcode: postcode || "",
-          },
+        console.log("🔹 Received PUT request for user update");
+    
+        const { name, email, birthday, phone, address_city, address_street, address_house_nr, postcode } = req.body;
+    
+        console.log("📌 Request body:", req.body);
+        console.log("📂 Uploaded file:", req.file);
+    
+        // Address data
+        const address = {
+          city: address_city,
+          street: address_street,
+          houseNr: address_house_nr,
+          postcode,
         };
-
-        //If a CV was uploaded, store the file path
+    
+        // Update object
+        const updatedData: any = { name, email, birthday, phone, address };
+    
+        // If a CV was uploaded, store the correct file path
         if (req.file) {
           updatedData.cv = `/uploads/cvs/${req.file.filename}`;
+          console.log("File saved at:", updatedData.cv);
         }
-
+    
+        // Update user in database
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updatedData, { new: true });
-
+    
         if (!updatedUser) {
           res.status(404).json({ message: "User not found" });
           return;
         }
-
-        res.json({
-          id: updatedUser.id.toString(),
-          name: updatedUser.name,
-          email: updatedUser.email,
-          birthday: updatedUser.birthday,
-          phone: updatedUser.phone,
-          address: updatedUser.address,
-          profilePic: updatedUser.profilePic || null,
-          cv: updatedUser.cv || null, 
-        });
+    
+        console.log("User updated successfully:", updatedUser);
+        res.json(updatedUser);
       } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).json({ message: "Server error" });
       }
     });
+    
 
     // Delete a user by ID
     router.delete("/users/:id", async (req: Request, res: Response): Promise<void> => {

@@ -58,12 +58,12 @@ const Settings = () => {
   const handleSaveSettings = async () => {
     try {
       const storedUserId = localStorage.getItem("userId");
-
+  
       if (!storedUserId) {
         alert("No user ID found!");
         return;
       }
-
+  
       const formData = new FormData();
       formData.append("name", username);
       formData.append("email", email);
@@ -73,30 +73,33 @@ const Settings = () => {
       formData.append("address_street", addressStreet);
       formData.append("address_house_nr", addressHouseNr);
       formData.append("postcode", postcode);
-
+  
       if (cv) {
+        console.log("📂 Uploading CV:", cv.name);
         formData.append("cv", cv);
       }
-
+  
       const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
         method: "PUT",
         body: formData,
       });
-
+  
       if (!response.ok) {
         throw new Error(`Failed to update user in backend: ${response.status}`);
       }
-
+  
       console.log("Backend updated successfully!");
-      
+  
       alert("Settings updated successfully!");
-
+      
       // Reload the page
       window.location.reload();
     } catch (error) {
+      console.error("Upload error:", error);
       alert("Failed to update settings.");
     }
   };
+  
   
   return (
     <div>
@@ -169,7 +172,12 @@ const Settings = () => {
           />
 
           {uploadedCv && (
-            <p>Current CV: <a href={`http://localhost:5001/${uploadedCv}`} target="_blank">View CV</a></p>
+            <p>
+              Current CV: 
+              <a href={`http://localhost:5001${uploadedCv}`} target="_blank" rel="noopener noreferrer">
+                View CV
+              </a>
+            </p>
           )}
 
 
