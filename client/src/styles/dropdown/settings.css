@@ -19,6 +19,8 @@ body {
   top: 50px;
   left: 0;
   width: 20%;
+  min-width: 180px;
+  max-width: 250px;
   height: 100vh;
   padding: 20px;
   background: #f8f9fa;
