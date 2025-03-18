@@ -5,6 +5,13 @@ interface IUser extends Document {
     email: string;
     password: string;
     profilePic?: string;
+    birthday?: string;
+    phone?: string;
+    address_city?: string;
+    address_street?: string;
+    address_house_nr?: string;
+    postcode?: string;
+    cv?: string;
     createdAt: Date;
 }
 
@@ -14,6 +21,13 @@ const UserSchema = new mongoose.Schema<IUser>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     profilePic: { type: String, default: "" },
+    birthday: {type: String, default: ""},
+    phone: {type: String, default: ""},
+    address_city: {type: String, default: ""},
+    address_street: {type: String, default: ""},
+    address_house_nr: {type: String, default: ""},
+    postcode: {type: String, default: ""},
+    cv: {type: String, default: ""},
     createdAt: { type: Date, default: Date.now },
 });
 
