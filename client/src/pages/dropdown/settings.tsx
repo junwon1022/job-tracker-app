@@ -7,17 +7,37 @@ const Settings = () => {
   const [email, setEmail] = useState("");
   const [notifications, setNotifications] = useState(false);
   const [theme, setTheme] = useState("light");
-  const [_, setStoredName] = useState("");
   
   useEffect(() => {
-    const storedUsername = localStorage.getItem("userName");
-    const storedEmail = localStorage.getItem("userEmail");
-    
-    if (storedUsername) {
-      setUsername(storedUsername);
-      setStoredName(storedUsername);
-    }
-    if (storedEmail) setEmail(storedEmail);
+    const fetchUserData = async () => {
+      const storedUserId = localStorage.getItem("userId");
+
+      if (!storedUserId) {
+        console.error("No valid userId found in localStorage");
+        return;
+      }
+
+      try {
+        console.log(`Fetching user data from: http://localhost:5001/api/auth/users/${storedUserId}`);
+        
+        const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user data: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Fetched user data:", data);
+
+        setUsername(data.name);
+        setEmail(data.email);
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
   }, []);
   
   const handleSaveSettings = async () => {
@@ -49,6 +69,9 @@ const Settings = () => {
       window.dispatchEvent(new Event("storage"));
       
       alert("Settings updated successfully!");
+
+      // Reload the page
+      window.location.reload();
     } catch (error) {
       alert("Failed to update settings.");
     }
