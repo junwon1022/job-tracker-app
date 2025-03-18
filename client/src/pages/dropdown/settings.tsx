@@ -27,6 +27,21 @@ const Settings = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
+      const cachedUser = localStorage.getItem("userData");
+
+      if (cachedUser) {
+        //Show cached user data instantly
+        const parsedUser = JSON.parse(cachedUser);
+        setUsername(parsedUser.name);
+        setEmail(parsedUser.email);
+        setBirthday(parsedUser.birthday || "");
+        setPhone(parsedUser.phone || "");
+        setAddressCity(parsedUser.address?.city || "");
+        setAddressStreet(parsedUser.address?.street || "");
+        setAddressHouseNr(parsedUser.address?.houseNr || "");
+        setPostcode(parsedUser.address?.postcode || "");
+        setUploadedCv(parsedUser.cv || null);
+      }
 
       if (!storedUserId) {
         console.error("No valid userId found in localStorage");
@@ -55,6 +70,8 @@ const Settings = () => {
         setPostcode(data.address?.postcode || "");
         setUploadedCv(data.cv || null);
 
+        // Cache the new user data
+        localStorage.setItem("userData", JSON.stringify(data));
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
