@@ -1,10 +1,24 @@
     import express, { Request, Response } from "express";
+    import multer from "multer";
     import bcrypt from "bcryptjs";
     import jwt from "jsonwebtoken";
     import { body, validationResult } from "express-validator";
     import User from "../models/User";
 
     const router = express.Router();
+
+
+    // Set up storage for CV uploads
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+          cb(null, "uploads/cvs/"); // Save files in "uploads/cvs" directory
+      },
+      filename: (req, file, cb) => {
+          cb(null, Date.now() + "-" + file.originalname); // Unique filename
+      },
+    });
+
+    const upload = multer({ storage });
 
     router.post(
         "/login",
@@ -139,16 +153,38 @@
     });
 
     // PUT a user by ID
-    router.put("/users/:id", async (req: Request, res: Response): Promise<void> => {
+    router.put("/users/:id", upload.single("cv"), async (req: Request, res: Response): Promise<void> => {
       try {
-        const { name, email } = req.body;
+        const { name, email, birthday, phone, address_city, address_street, address_house_nr, postcode, cv } = req.body;
 
+        // Address structure
+        const address = {
+          city: address_city,
+          street: address_street,
+          houseNr: address_house_nr,
+          postcode: postcode,
+        };
+        
         // Find user by ID and update
-        const updatedUser = await User.findByIdAndUpdate(
-          req.params.id,
-          { name, email },
-          { new: true }
-        );
+        const updatedData: any = {
+          name, 
+          email, 
+          birthday, 
+          phone, 
+          address: { 
+            city: address_city, 
+            street: address_street, 
+            houseNr: address_house_nr, 
+            postcode 
+          }
+        };
+
+        //If a CV was uploaded, store the file path
+        if (req.file) {
+          updatedData.cv = `/uploads/cvs/${req.file.filename}`;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, updatedData, { new: true });
 
         if (!updatedUser) {
           res.status(404).json({ message: "User not found" });
@@ -159,7 +195,11 @@
           id: updatedUser.id.toString(),
           name: updatedUser.name,
           email: updatedUser.email,
+          birthday: updatedUser.birthday,
+          phone: updatedUser.phone,
+          address: updatedUser.address,
           profilePic: updatedUser.profilePic || null,
+          cv: updatedUser.cv || null, 
         });
       } catch (error) {
         console.error("Error updating user:", error);

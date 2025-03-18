@@ -12,6 +12,7 @@ const Settings = () => {
   const [addressHouseNr, setAddressHouseNr] = useState("");
   const [postcode, setPostcode] = useState("");
   const [cv, setCv] = useState<File | null>(null);
+  const [uploadedCv, setUploadedCv] = useState<string | null>(null); // Track existing CV
   const [notifications, setNotifications] = useState(false);
   const [theme, setTheme] = useState("light");
   
@@ -44,6 +45,7 @@ const Settings = () => {
         setAddressStreet(data.address?.street || "");
         setAddressHouseNr(data.address?.houseNr || "");
         setPostcode(data.address?.postcode || "");
+        setUploadedCv(data.cv || null);
 
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -62,12 +64,44 @@ const Settings = () => {
         return;
       }
 
-       // Save new name to the database
-      const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: username, email }),
-      });
+      let response;
+
+      if (cv) {
+        // Use FormData when uploading a file
+        const formData = new FormData();
+        formData.append("name", username);
+        formData.append("email", email);
+        formData.append("birthday", birthday);
+        formData.append("phone", phone);
+        formData.append("address[city]", addressCity);
+        formData.append("address[street]", addressStreet);
+        formData.append("address[houseNr]", addressHouseNr);
+        formData.append("address[postcode]", postcode);
+        formData.append("cv", cv);
+  
+        response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
+          method: "PUT",
+          body: formData,
+        });
+      } else {
+        // Use JSON if no file is being uploaded
+        response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: username,
+            email,
+            birthday,
+            phone,
+            address: {
+              city: addressCity,
+              street: addressStreet,
+              houseNr: addressHouseNr,
+              postcode: postcode,
+            },
+          }),
+        });
+      }
 
       if (!response.ok) {
         throw new Error(`Failed to update user in backend: ${response.status}`);
@@ -158,6 +192,11 @@ const Settings = () => {
           accept=".pdf,.docx"
           onChange={(e) => setCv(e.target.files?.[0] || null)}
         />
+
+        {uploadedCv && (
+          <p>Current CV: <a href={`http://localhost:5001/${uploadedCv}`} target="_blank">View CV</a></p>
+        )}
+
 
         <h3>Preferences</h3>
         <label>
