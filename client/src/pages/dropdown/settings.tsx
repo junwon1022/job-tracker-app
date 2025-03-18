@@ -231,14 +231,16 @@ const Settings = () => {
           )}
 
           {selectedSection === "delete-account" && (
-            <>
+            <div className="delete-account-container">
               <h2>Delete Account</h2>
               <p><strong>Warning:</strong> This action is irreversible. Proceed with caution.</p>
               <button className="delete-button">Delete My Account</button>
-            </>
+            </div>
           )}
 
-          <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
+          {selectedSection !== "delete-account" && (
+            <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
+          )}
         </div>
       </div>
     </div>

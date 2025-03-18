@@ -92,3 +92,20 @@ input[type="checkbox"] {
 .save-button:hover {
   background-color: #0056b3;
 }
+
+.delete-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.delete-account-container {
+  margin-top: 150px; 
+  text-align: center;
+}
