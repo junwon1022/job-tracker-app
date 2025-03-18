@@ -166,26 +166,18 @@
       try {
         const { name, email, birthday, phone, address_city, address_street, address_house_nr, postcode, cv } = req.body;
 
-        // Address structure
-        const address = {
-          city: address_city,
-          street: address_street,
-          houseNr: address_house_nr,
-          postcode: postcode,
-        };
-        
-        // Find user by ID and update
+        // Ensure all fields are structured properly
         const updatedData: any = {
-          name, 
-          email, 
-          birthday, 
-          phone, 
-          address: { 
-            city: address_city, 
-            street: address_street, 
-            houseNr: address_house_nr, 
-            postcode 
-          }
+          name,
+          email,
+          birthday,
+          phone,
+          address: {
+            city: address_city || "",
+            street: address_street || "",
+            houseNr: address_house_nr || "",
+            postcode: postcode || "",
+          },
         };
 
         //If a CV was uploaded, store the file path

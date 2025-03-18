@@ -64,56 +64,30 @@ const Settings = () => {
         return;
       }
 
-      let response;
+      const formData = new FormData();
+      formData.append("name", username);
+      formData.append("email", email);
+      formData.append("birthday", birthday);
+      formData.append("phone", phone);
+      formData.append("address_city", addressCity);
+      formData.append("address_street", addressStreet);
+      formData.append("address_house_nr", addressHouseNr);
+      formData.append("postcode", postcode);
 
       if (cv) {
-        // Use FormData when uploading a file
-        const formData = new FormData();
-        formData.append("name", username);
-        formData.append("email", email);
-        formData.append("birthday", birthday);
-        formData.append("phone", phone);
-        formData.append("address[city]", addressCity);
-        formData.append("address[street]", addressStreet);
-        formData.append("address[houseNr]", addressHouseNr);
-        formData.append("address[postcode]", postcode);
         formData.append("cv", cv);
-  
-        response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
-          method: "PUT",
-          body: formData,
-        });
-      } else {
-        // Use JSON if no file is being uploaded
-        response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: username,
-            email,
-            birthday,
-            phone,
-            address: {
-              city: addressCity,
-              street: addressStreet,
-              houseNr: addressHouseNr,
-              postcode: postcode,
-            },
-          }),
-        });
       }
+
+      const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
+        method: "PUT",
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error(`Failed to update user in backend: ${response.status}`);
       }
 
       console.log("Backend updated successfully!");
-
-
-      localStorage.setItem("userName", username);
-      localStorage.setItem("userEmail", email);
-      
-      window.dispatchEvent(new Event("storage"));
       
       alert("Settings updated successfully!");
 
