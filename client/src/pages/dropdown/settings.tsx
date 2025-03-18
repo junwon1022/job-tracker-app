@@ -198,7 +198,7 @@ const Settings = () => {
           )}
 
           {selectedSection === "cv-upload" && (
-            <>
+            <div className="cv-container">
               <h2>Upload CV</h2>
               <label>Choose File:</label>
               <input type="file" accept=".pdf,.docx" onChange={(e) => setCv(e.target.files?.[0] || null)} />
@@ -211,11 +211,11 @@ const Settings = () => {
                   </a>
                 </p>
               )}
-            </>
+            </div>
           )}
 
           {selectedSection === "preferences" && (
-            <>
+            <div className="preferences-container">
               <h2>Preferences</h2>
               <label>
                 <input type="checkbox" checked={notifications} onChange={() => setNotifications(!notifications)} />
@@ -227,7 +227,7 @@ const Settings = () => {
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
               </select>
-            </>
+            </div>
           )}
 
           {selectedSection === "delete-account" && (
