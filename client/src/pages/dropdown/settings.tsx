@@ -171,15 +171,19 @@ const Settings = () => {
             onChange={(e) => setCv(e.target.files?.[0] || null)}
           />
 
+          
           {uploadedCv && (
             <p>
-              Current CV: 
-              <a href={`http://localhost:5001${uploadedCv}`} target="_blank" rel="noopener noreferrer">
-                View CV
+              Current CV:&nbsp;
+              <a 
+                href={`http://localhost:5001${uploadedCv}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                {decodeURIComponent(uploadedCv.split("/").pop()?.replace(/^\d+-/, "") || "View CV")}
               </a>
             </p>
           )}
-
 
           <h3>Preferences</h3>
           <label>
