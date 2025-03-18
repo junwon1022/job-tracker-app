@@ -177,6 +177,10 @@
           res.status(404).json({ message: "User not found" });
           return;
         }
+
+        res.json({ message: "User deleted successfully", user: deletedUser });
+
+        
       } catch(error){
         console.error("Error deleting user:", error);
         res.status(500).json({message: "Server error"});
