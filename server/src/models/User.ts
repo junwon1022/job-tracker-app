@@ -7,10 +7,12 @@ interface IUser extends Document {
     profilePic?: string;
     birthday?: string;
     phone?: string;
-    address_city?: string;
-    address_street?: string;
-    address_house_nr?: string;
-    postcode?: string;
+    address?: {
+        city?: string;
+        street?: string;
+        houseNr?: string;
+        postcode?: string;
+    };
     cv?: string;
     createdAt: Date;
 }
@@ -23,10 +25,12 @@ const UserSchema = new mongoose.Schema<IUser>({
     profilePic: { type: String, default: "" },
     birthday: {type: String, default: ""},
     phone: {type: String, default: ""},
-    address_city: {type: String, default: ""},
-    address_street: {type: String, default: ""},
-    address_house_nr: {type: String, default: ""},
-    postcode: {type: String, default: ""},
+    address: {
+        city: { type: String, default: "" },
+        street: { type: String, default: "" },
+        houseNr: { type: String, default: "" },
+        postcode: { type: String, default: "" }
+    },
     cv: {type: String, default: ""},
     createdAt: { type: Date, default: Date.now },
 });
