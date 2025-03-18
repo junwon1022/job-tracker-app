@@ -101,94 +101,96 @@ const Settings = () => {
   return (
     <div>
       <Navbar />
-      <div className="settings-container">
-        <h2>Account Settings</h2>
-        <label>Username:</label>
-        <input 
-          type="text" 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter username"
-        />
-
-        <label>Email:</label>
-        <input 
-          type="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-        />
-
-        <label>Birthday:</label>
-        <input 
-          type="date"
-          value={birthday}
-          onChange={(e) => setBirthday(e.target.value)}
-        />
-
-        <label>Phone:</label>
-        <input
-          type="text"
-          value={phone} 
-          onChange={(e) => setPhone(e.target.value)} 
-        />
-
-        <label>City:</label>
-        <input type="text"
-          value={addressCity}
-          onChange={(e) => setAddressCity(e.target.value)}
-        />
-
-        <label>Street:</label>
-        <input
-          type="text"
-          value={addressStreet}
-          onChange={(e) => 
-          setAddressStreet(e.target.value)} 
-        />
-
-        <label>House Number:</label>
-        <input type="text" 
-          value={addressHouseNr}
-          onChange={(e) => setAddressHouseNr(e.target.value)}
-        />
-
-        <label>Postcode:</label>
-        <input
-          type="text"
-          value={postcode}
-          onChange={(e) => setPostcode(e.target.value)}
-        />
-
-        <label>Upload CV:</label>
-        <input
-          type="file"
-          accept=".pdf,.docx"
-          onChange={(e) => setCv(e.target.files?.[0] || null)}
-        />
-
-        {uploadedCv && (
-          <p>Current CV: <a href={`http://localhost:5001/${uploadedCv}`} target="_blank">View CV</a></p>
-        )}
-
-
-        <h3>Preferences</h3>
-        <label>
+      <div className= "settings-page">
+        <div className="settings-container">
+          <h2>Account Settings</h2>
+          <label>Username:</label>
           <input 
-            type="checkbox" 
-            checked={notifications} 
-            onChange={() => setNotifications(!notifications)}
+            type="text" 
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter username"
           />
-          Enable Notifications
-        </label>
 
-        <label>Theme:</label>
-        <select value={theme} onChange={(e) => setTheme(e.target.value)}>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
+          <label>Email:</label>
+          <input 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+          />
 
-        <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
+          <label>Birthday:</label>
+          <input 
+            type="date"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+          />
+
+          <label>Phone:</label>
+          <input
+            type="text"
+            value={phone} 
+            onChange={(e) => setPhone(e.target.value)} 
+          />
+
+          <label>City:</label>
+          <input type="text"
+            value={addressCity}
+            onChange={(e) => setAddressCity(e.target.value)}
+          />
+
+          <label>Street:</label>
+          <input
+            type="text"
+            value={addressStreet}
+            onChange={(e) => 
+            setAddressStreet(e.target.value)} 
+          />
+
+          <label>House Number:</label>
+          <input type="text" 
+            value={addressHouseNr}
+            onChange={(e) => setAddressHouseNr(e.target.value)}
+          />
+
+          <label>Postcode:</label>
+          <input
+            type="text"
+            value={postcode}
+            onChange={(e) => setPostcode(e.target.value)}
+          />
+
+          <label>Upload CV:</label>
+          <input
+            type="file"
+            accept=".pdf,.docx"
+            onChange={(e) => setCv(e.target.files?.[0] || null)}
+          />
+
+          {uploadedCv && (
+            <p>Current CV: <a href={`http://localhost:5001/${uploadedCv}`} target="_blank">View CV</a></p>
+          )}
+
+
+          <h3>Preferences</h3>
+          <label>
+            <input 
+              type="checkbox" 
+              checked={notifications} 
+              onChange={() => setNotifications(!notifications)}
+            />
+            Enable Notifications
+          </label>
+
+          <label>Theme:</label>
+          <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+
+          <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
+        </div>
       </div>
     </div>
   );
