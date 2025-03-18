@@ -144,7 +144,16 @@
           id: user.id.toString(),
           name: user.name,
           email: user.email,
-          profilePic: user.profilePic || null, // Include profile picture
+          profilePic: user.profilePic || null,
+          birthday: user.birthday || "",
+          phone: user.phone || "",
+          address: {
+            city: user.address?.city || "",
+            street: user.address?.street || "",
+            houseNr: user.address?.houseNr || "",
+            postcode: user.address?.postcode || "",
+          },
+          cv: user.cv || "",
         });
       } catch (error) {
         console.error("Error fetching user:", error);
