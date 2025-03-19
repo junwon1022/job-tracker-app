@@ -26,9 +26,19 @@ const Settings = () => {
 
   const [password, setPassword] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+  // Retrieve last selected section from localStorage
+  const handleSectionChange = (section: string) => {
+    setSelectedSection(section);
+    localStorage.setItem("selectedSection", section); 
+  };
   
   useEffect(() => {
-
+    // Restore last selected section
+    const savedSection = localStorage.getItem("selectedSection");
+    if (savedSection) {
+      setSelectedSection(savedSection);
+    }
     // Fetching user data
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
@@ -83,13 +93,17 @@ const Settings = () => {
     };
 
     fetchUserData();
+
+    // When user leaves the settings page, the selected section is reset
+    return () => {
+      localStorage.removeItem("selectedSection");
+    };
   }, []);
   
   // Handling Save Button
   const handleSaveSettings = async () => {
     try {
       const storedUserId = localStorage.getItem("userId");
-  
       if (!storedUserId) {
         alert("No user ID found!");
         return;
@@ -118,18 +132,22 @@ const Settings = () => {
       if (!response.ok) {
         throw new Error(`Failed to update user in backend: ${response.status}`);
       }
-  
       console.log("Backend updated successfully!");
-  
       alert("Settings updated successfully!");
-      
+
+      // Store the selected section before reloading
+      localStorage.setItem("selectedSection", selectedSection);
+
       // Reload the page
       window.location.reload();
+
     } catch (error) {
       console.error("Upload error:", error);
       alert("Failed to update settings.");
     }
   };
+
+
 
   // Handling Delete button
   const handleDeleteAccount = async () => {
@@ -185,19 +203,19 @@ const Settings = () => {
         <div className="settings-sidebar">
           <h3>Settings</h3>
           <ul>
-            <li onClick={() => setSelectedSection("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
               User Information
             </li>
-            <li onClick={() => setSelectedSection("password")} className={selectedSection === "password" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("password")} className={selectedSection === "password" ? "active" : ""}>
               Change Password
             </li>
-            <li onClick={() => setSelectedSection("cv-upload")} className={selectedSection === "cv-upload" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("cv-upload")} className={selectedSection === "cv-upload" ? "active" : ""}>
               Upload CV
             </li>
-            <li onClick={() => setSelectedSection("preferences")} className={selectedSection === "preferences" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("preferences")} className={selectedSection === "preferences" ? "active" : ""}>
               Preferences
             </li>
-            <li onClick={() => setSelectedSection("delete-account")} className={selectedSection === "delete-account" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("delete-account")} className={selectedSection === "delete-account" ? "active" : ""}>
               Delete Account
             </li>
           </ul>
