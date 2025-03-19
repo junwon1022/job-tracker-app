@@ -156,6 +156,7 @@ const Settings = () => {
         throw new Error(errorData.msg || "Password verification failed");
       }
 
+      // Deletion API
       const deleteResponse = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
         method: "DELETE",
       });
@@ -175,7 +176,6 @@ const Settings = () => {
       alert("Failed to delete user");
     }
   }
-  
   
   return (
     <div>
