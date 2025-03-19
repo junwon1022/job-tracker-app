@@ -23,8 +23,13 @@ const Settings = () => {
   // Preferences States
   const [notifications, setNotifications] = useState(false);
   const [theme, setTheme] = useState("light");
+
+  const [password, setPassword] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   
   useEffect(() => {
+
+    // Fetching user data
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
       const cachedUser = localStorage.getItem("userData");
@@ -80,6 +85,7 @@ const Settings = () => {
     fetchUserData();
   }, []);
   
+  // Handling Save Button
   const handleSaveSettings = async () => {
     try {
       const storedUserId = localStorage.getItem("userId");
@@ -124,6 +130,51 @@ const Settings = () => {
       alert("Failed to update settings.");
     }
   };
+
+  // Handling Delete button
+  const handleDeleteAccount = async () => {
+    try {
+      const storedUserId = localStorage.getItem("userId");
+
+      if(!storedUserId) {
+        alert("No User ID found in localStorage");
+        return;
+      }
+
+      // Send password confirmation request to backend
+      const response = await fetch(`http://localhost:5001/api/auth/verify-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: storedUserId, password }),
+      });
+
+      const responseText = await response.text();
+      console.log("Password Verification Response:", responseText);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || "Password verification failed");
+      }
+
+      const deleteResponse = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`, {
+        method: "DELETE",
+      });
+
+      const deleteText = await deleteResponse.text();
+      console.log("Account Deletion Response:", deleteText);
+
+      if(!deleteResponse.ok) {
+        throw new Error("Failed to delete user");
+      }
+
+      alert("User Deletion Complete");
+      localStorage.clear();
+      window.location.href = "/";
+    } catch(error) {
+      console.error("User Deletion Fail:", error);
+      alert("Failed to delete user");
+    }
+  }
   
   
   return (
@@ -183,6 +234,7 @@ const Settings = () => {
             </>
           )}
 
+          {/* Password change Container */}
           {selectedSection === "password" && (
             <>
               <h2>Change Password</h2>
@@ -197,6 +249,7 @@ const Settings = () => {
             </>
           )}
 
+          {/* CV Upload Container */}
           {selectedSection === "cv-upload" && (
             <div className="cv-container">
               <h2>Upload CV</h2>
@@ -214,6 +267,7 @@ const Settings = () => {
             </div>
           )}
 
+          {/* Preferences Container */}
           {selectedSection === "preferences" && (
             <div className="preferences-container">
               <h2>Preferences</h2>
@@ -230,11 +284,39 @@ const Settings = () => {
             </div>
           )}
 
+          {/* Account Deletion Container */}
           {selectedSection === "delete-account" && (
             <div className="delete-account-container">
               <h2>Delete Account</h2>
               <p><strong>Warning:</strong> This action is irreversible. Proceed with caution.</p>
-              <button className="delete-button">Delete My Account</button>
+              <button className="delete-button" onClick={() => setDeleteConfirm(true)}>Delete My Account</button>
+            </div>
+          )}
+
+          {/* Delete Account Confirmation Modal */}
+          {deleteConfirm && (
+            <div className="deletion-confirm-overlay">
+              <div className="deletion-confirm-content">
+                <h2>Confirm Account Deletion</h2>
+                <p>Please enter your password to confirm account deletion.</p>
+                
+                {/* Password Input Field */}
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <div className="modal-buttons">
+                  <button className="confirm-button" onClick={handleDeleteAccount}>
+                    Confirm Delete
+                  </button>
+                  <button className="cancel-button" onClick={() => setDeleteConfirm(false)}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 

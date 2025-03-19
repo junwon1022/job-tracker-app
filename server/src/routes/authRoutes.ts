@@ -238,5 +238,25 @@
     });
 
 
+    // Verifying password API
+    router.post("/verify-password", async (req: Request, res: Response): Promise<void> => {
+      const { userId, password } = req.body;
+      
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).json({ msg: "User not found" });
+        return;
+      }
+    
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        res.status(401).json({ msg: "Incorrect password" });
+        return;
+      }
+    
+      res.json({ success: true });
+    });
+
+
 
     export default router;
