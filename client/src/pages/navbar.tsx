@@ -13,6 +13,11 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
+      const cachedName = localStorage.getItem("userName");
+      const cachedProfilePic = localStorage.getItem("profilePic");
+
+      if (cachedName) setName(cachedName);
+      if (cachedProfilePic) setProfilePic(cachedProfilePic);
   
       if (!storedUserId) {
         console.error("No valid userId found in localStorage");
@@ -35,6 +40,7 @@ const Navbar = () => {
         setProfilePic(data.profilePic ? `http://localhost:5001${data.profilePic}` : userIcon);
 
         localStorage.setItem("userName", data.name);
+        localStorage.setItem("profilePic", data.profilePic ? `http://localhost:5001${data.profilePic}` : userIcon);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -133,6 +139,8 @@ const Navbar = () => {
       const data = await response.json();
       if (data.profilePic) {
         const newProfilePic = `http://localhost:5001${data.profilePic}`;
+        localStorage.setItem("profilePic", newProfilePic);
+        window.dispatchEvent(new Event("storage"));
         setProfilePic(newProfilePic); // Update UI immediately
       }
   
