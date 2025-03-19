@@ -29,7 +29,8 @@ const PORT = Number(process.env.PORT) || 5001;
 connectDB();
 
 // API Routes
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use('/api/auth', authRoutes); // Authentication API
 app.use('/api/jobs', jobRoutes); // Jobs API
 app.use('/api/profile', profileRoutes); // Profile API
