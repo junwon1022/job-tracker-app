@@ -27,18 +27,24 @@ const Settings = () => {
   const [password, setPassword] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
-  // Retrieve last selected section from localStorage
-  const handleSectionChange = (section: string) => {
-    setSelectedSection(section);
-    localStorage.setItem("selectedSection", section); 
-  };
-  
   useEffect(() => {
     // Restore last selected section
     const savedSection = localStorage.getItem("selectedSection");
     if (savedSection) {
       setSelectedSection(savedSection);
     }
+  
+    // Restore theme preference
+    const savedTheme = localStorage.getItem("theme") || "light"; // Default to light mode
+    document.body.setAttribute("data-theme", savedTheme);
+  
+    // Cleanup: Reset selected section on page exit
+    return () => {
+      localStorage.removeItem("selectedSection");
+    };
+  }, []);
+  
+  useEffect(() => {
     // Fetching user data
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
@@ -93,12 +99,13 @@ const Settings = () => {
     };
 
     fetchUserData();
-
-    // When user leaves the settings page, the selected section is reset
-    return () => {
-      localStorage.removeItem("selectedSection");
-    };
   }, []);
+
+  // Retrieve last selected section from localStorage
+  const handleSectionChange = (section: string) => {
+    setSelectedSection(section);
+    localStorage.setItem("selectedSection", section); 
+  };
   
   // Handling Save Button
   const handleSaveSettings = async () => {
@@ -194,6 +201,13 @@ const Settings = () => {
       alert("Failed to delete user");
     }
   }
+
+  // Handle the theme change (dark, light)
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.body.setAttribute("data-theme", newTheme); // Apply theme to body
+  };
   
   return (
     <div>
@@ -295,10 +309,10 @@ const Settings = () => {
               </label>
 
               <label>Theme:</label>
-              <select value={theme} onChange={(e) => setTheme(e.target.value)}>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-              </select>
+                <select value={theme} onChange={(e) => handleThemeChange(e.target.value)}>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
             </div>
           )}
 
@@ -338,7 +352,7 @@ const Settings = () => {
             </div>
           )}
 
-          {selectedSection !== "delete-account" && (
+          {selectedSection !== "delete-account" && selectedSection !== "preferences" && (
             <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
           )}
         </div>

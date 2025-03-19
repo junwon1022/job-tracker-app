@@ -11,7 +11,7 @@ body {
 
 .settings-page {
   display: flex;
-  height: 100vh;
+  height: auto;
 }
 
 .settings-sidebar {
@@ -105,18 +105,15 @@ input[type="checkbox"] {
   font-weight: bold;
 }
 
-.cv-container {
-  margin-top: 100px; 
+.cv-container { 
   text-align: center;
 }
 
 .preferences-container {
-  margin-top: 100px; 
   text-align: center;
 }
 
 .delete-account-container {
-  margin-top: 100px; 
   text-align: center;
 }
 
@@ -180,4 +177,55 @@ input[type="checkbox"] {
   transform: translateY(-20px);
   opacity: 0;
   animation: slideFadeIn 0.5s ease-out forwards;
+}
+
+
+/* ================================= Dark Theme =================================== */
+body[data-theme="light"], html[data-theme="light"] {
+  background-color: #ffffff;
+  color: #333;
+}
+
+/* Ensure the whole body and html are dark in dark mode */
+body[data-theme="dark"], html[data-theme="dark"] {
+  background-color: #121212 !important;
+  color: white !important;
+}
+
+/* Ensure settings page and container inherit dark mode */
+body[data-theme="dark"] .settings-page, 
+body[data-theme="dark"] .settings-container {
+  background-color: #121212 !important;
+  color: white !important;
+}
+
+/* Ensure inputs and selects follow dark mode */
+body[data-theme="dark"] input,
+body[data-theme="dark"] select {
+  background-color: #333 !important;
+  color: white !important;
+  border: 1px solid #555 !important;
+}
+
+/* Ensure Save button follows dark theme */
+body[data-theme="dark"] .save-button {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+/* Ensure the sidebar remains dark */
+body[data-theme="dark"] .settings-sidebar {
+  background-color: #222 !important;
+  color: white !important;
+}
+
+/* Ensure headings are white */
+body[data-theme="dark"] h2, 
+body[data-theme="dark"] h3, 
+body[data-theme="dark"] label {
+  color: white !important;
+}
+
+.settings-page, .settings-container, .settings-sidebar {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
