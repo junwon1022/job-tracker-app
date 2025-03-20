@@ -306,7 +306,7 @@ const Settings = () => {
               <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
 
               <label>Email:</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input type="email" value={email} disabled className="disabled-input" />
 
               <label>Birthday:</label>
               <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
