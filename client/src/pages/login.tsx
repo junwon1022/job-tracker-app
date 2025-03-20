@@ -10,40 +10,30 @@
     const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
+        // API call to login
         const response = await fetch("http://localhost:5001/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
         });
-    
-        if (!response.ok) {
-          const errorData = await response.json();
-          alert(errorData.msg || "Login failed");
-          return;
-        }
-    
+  
         const data = await response.json();
-        console.log("Login success:", data);
-        console.log("User object:", data.user);
+  
+        if (!response.ok) {
+            alert(data.msg || "Login failed");
+            return;
+        }
+  
+        console.log("Logged in user data:", data);
+  
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.user.id); 
 
-        const userId = data.user._id || data.user.id;
-        if (!userId) {
-          throw new Error("Invalid user data received: Missing user ID");
-        }
-        // Ensure `userId` is correctly stored in `localStorage`
-        if (data.user && data.user.id) {
-          localStorage.setItem("userId", data.user.id);
-          localStorage.setItem("userName", data.user.name);
-          localStorage.setItem("token", data.token);
-        } else {
-          throw new Error("Invalid user data received: Missing user ID");
-        }
-        
-        // Navigate to the dashboard
+        // If successful, navigate to dashboard
         navigate("/dashboard");
       } catch (err) {
-        console.error("Login error:", err);
-        alert("Something went wrong. Please try again.");
+          console.error("Login error:", err);
+          alert("Something went wrong. Please try again.");
       }
     };
 
