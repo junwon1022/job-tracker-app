@@ -1,11 +1,12 @@
     import express, { Request, Response } from "express";
     import multer from "multer";
     import bcrypt from "bcryptjs";
-    import jwt from "jsonwebtoken";
+    import jwt, {JwtPayload} from "jsonwebtoken";
     import fs from "fs";
     import path from "path";
     import { body, validationResult } from "express-validator";
     import User from "../models/User";
+    import nodemailer from "nodemailer";
 
     const router = express.Router();
 
@@ -20,7 +21,7 @@
     // Configure Multer storage
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
-        console.log(`Saving file to: ${uploadDir}`);
+        console.log(`Saving file to: ${uploadDir}`);  
         cb(null, uploadDir);
       },
       filename: (req, file, cb) => {
@@ -85,50 +86,103 @@
         }
       );
 
+    
+    // Email transporter setup
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER, // Your email
+        pass: process.env.EMAIL_PASS, // Your email password or app password
+      },
+    });
+
     // User Registration
-    router.post(
-        "/register",
-        [
-            body("name", "Name is required").notEmpty(),
-            body("email", "Please enter a valid email").isEmail(),
-            body("password", "Password must be at least 6 characters").isLength({ min: 6 }),
-        ],
-        async (req: Request, res: Response): Promise<void> => {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                res.status(400).json({ errors: errors.array() });
-                return; // ✅ Ensure function exits after sending a response
-            }
+    // User Registration
+    router.post("/register", async (req: Request, res: Response): Promise<void> => {
+      try {
+        const { name, email, password } = req.body;
 
-            const { name, email, password } = req.body;
-
-            try {
-                let user = await User.findOne({ email });
-                if (user) {
-                    res.status(400).json({ msg: "User already exists" });
-                    return; // ✅ Ensure function exits
-                }
-
-                const hashedPassword = await bcrypt.hash(password, 10);
-                user = new User({ name, email, password: hashedPassword });
-
-                await user.save();
-
-                const payload = { user: { id: user.id } };
-                const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "1h" });
-
-                res.json({ 
-                  token,
-                  user: {
-                    name: user.name,
-                    email: user.email
-                  }
-                });
-            } catch (error) {
-                res.status(500).send("Server Error");
-            }
+        // Check if user already exists
+        let user = await User.findOne({ email });
+        if (user) {
+          res.status(400).json({ msg: "User already exists." });
+          return;
         }
-    );
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create user with isVerified: false
+        user = new User({
+          name,
+          email,
+          password: hashedPassword,
+          isVerified: false, // New field
+        });
+
+        await user.save();
+
+        if (!process.env.JWT_SECRET) {
+          throw new Error("JWT_SECRET is not defined. Please check your .env file.");
+        }
+
+        // Generate verification token
+        const verificationToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+          expiresIn: "1h", // Token expires in 1 hour
+        });
+
+        // Send verification email
+        const verificationUrl = `http://localhost:5001/api/auth/verify-email/${verificationToken}`;
+
+        await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: email,
+          subject: "Verify Your Email",
+          html: `<p>Click the link below to verify your email:</p>
+                <a href="${verificationUrl}">${verificationUrl}</a>`,
+        }, (error: Error | null, info: nodemailer.SentMessageInfo) => {
+          if (error) {
+            console.error("❌ Email sending failed:", error);
+          } else {
+            console.log("✅ Email sent successfully:", info.response);
+          }
+        });
+        
+
+        res.status(200).json({
+          msg: "User registered successfully. Please check your email to verify your account.",
+        });
+
+      } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ msg: "Server error" });
+      }
+    });
+
+    router.get("/verify-email/:token", async (req, res) => {
+      try {
+        const { token } = req.params;
+    
+        if (!process.env.JWT_SECRET) {
+          throw new Error("JWT_SECRET is not defined. Please check your .env file.");
+        }
+    
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+        if (typeof decoded !== "object" || !decoded.email) {
+          throw new Error("Invalid token: Missing email.");
+        }
+        const email = decoded.email;
+    
+        // Update user status
+        await User.findOneAndUpdate({ email }, { isVerified: true });
+    
+        res.redirect("http://localhost:3000/login?verified=true"); // Redirect user to login page
+      } catch (error) {
+        console.error("Verification error:", error);
+        res.status(400).json({ msg: "Invalid or expired token." });
+      }
+    });
 
 
     // Get All Users
