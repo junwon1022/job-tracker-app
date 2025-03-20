@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/settings.css";
+import Modal from "../modal"; 
 
 const Settings = () => {
   // Controls which section is displayed
   const [selectedSection, setSelectedSection] = useState("user-info"); 
+
+  const [showModal, setShowModal] = useState(false); // State to handle modal visibility
 
   // User Information States
   const [username, setUsername] = useState("");
@@ -147,18 +150,21 @@ const Settings = () => {
         throw new Error(`Failed to update user in backend: ${response.status}`);
       }
       console.log("Backend updated successfully!");
-      alert("Settings updated successfully!");
+      setShowModal(true); // Show the modal
 
       // Store the selected section before reloading
       localStorage.setItem("selectedSection", selectedSection);
-
-      // Reload the page
-      window.location.reload();
 
     } catch (error) {
       console.error("Upload error:", error);
       alert("Failed to update settings.");
     }
+  };
+
+  // Modal to show when clicking 'Save Settings'
+  const handleCloseModal = () => {
+    setShowModal(false);
+    window.location.reload(); // Reloads only after the user clicks OK
   };
 
   // Handling Delete button
@@ -436,7 +442,11 @@ const Settings = () => {
           selectedSection !== "preferences" && 
           selectedSection !== "password" && (
             <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
+            
           )}
+
+          {/* Show the modal when settings are updated */}
+          {showModal && <Modal message="Settings updated successfully!" onClose = {handleCloseModal} />}
         </div>
       </div>
     </div>
