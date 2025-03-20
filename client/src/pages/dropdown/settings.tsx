@@ -125,7 +125,7 @@ const Settings = () => {
   };
 
   // Show modals
-  const showModal = (message: string, closeAction: () => void = () => {}) => {
+  const showModal = (message: string, closeAction: () => void = () => setModalMessage(null)) => {
     setModalMessage(message);
     setModalCloseAction(() => closeAction);
   };
@@ -222,6 +222,7 @@ const Settings = () => {
     } catch(error) {
       console.error("User Deletion Fail:", error);
       showModal("Failed to delete user");
+
     }
   }
 
