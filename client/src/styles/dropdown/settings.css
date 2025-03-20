@@ -185,6 +185,15 @@ input[type="checkbox"] {
   margin-bottom: 10px;
 }
 
+.disabled-input {
+  background-color: #f5f5f5; 
+  color: #999;
+  cursor: not-allowed;
+}
+
+
+
+
 
 /* ================================= Dark Theme =================================== */
 body[data-theme="light"], html[data-theme="light"] {

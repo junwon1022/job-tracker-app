@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/settings.css";
+import Modal from "../modal"; 
 
 const Settings = () => {
+
+  /* =============================== State initializations =================================== */
   // Controls which section is displayed
   const [selectedSection, setSelectedSection] = useState("user-info"); 
 
+  // State to handle modal visibility
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
+  const [modalCloseAction, setModalCloseAction] = useState<() => void>(() => {});
+ 
   // User Information States
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -34,6 +41,8 @@ const Settings = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+
+  /* ======================================= Effects ========================================== */
   useEffect(() => {
     // Restore last selected section
     const savedSection = localStorage.getItem("selectedSection");
@@ -107,11 +116,18 @@ const Settings = () => {
 
     fetchUserData();
   }, []);
+  /* ======================================== Methods ============================================== */
 
   // Retrieve last selected section from localStorage
   const handleSectionChange = (section: string) => {
     setSelectedSection(section);
     localStorage.setItem("selectedSection", section); 
+  };
+
+  // Show modals
+  const showModal = (message: string, closeAction: () => void = () => {}) => {
+    setModalMessage(message);
+    setModalCloseAction(() => closeAction);
   };
   
   // Handling Save Button
@@ -119,7 +135,7 @@ const Settings = () => {
     try {
       const storedUserId = localStorage.getItem("userId");
       if (!storedUserId) {
-        alert("No user ID found!");
+        showModal("No user ID found!");
         return;
       }
   
@@ -147,17 +163,16 @@ const Settings = () => {
         throw new Error(`Failed to update user in backend: ${response.status}`);
       }
       console.log("Backend updated successfully!");
-      alert("Settings updated successfully!");
+
+      // Show modal and reload
+      showModal("Settings updated successfully!", () => window.location.reload());
 
       // Store the selected section before reloading
       localStorage.setItem("selectedSection", selectedSection);
 
-      // Reload the page
-      window.location.reload();
-
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Failed to update settings.");
+      showModal("Failed to update settings.");
     }
   };
 
@@ -167,7 +182,7 @@ const Settings = () => {
       const storedUserId = localStorage.getItem("userId");
 
       if(!storedUserId) {
-        alert("No User ID found in localStorage");
+        showModal("No User ID found in localStorage");
         return;
       }
 
@@ -198,12 +213,15 @@ const Settings = () => {
         throw new Error("Failed to delete user");
       }
 
-      alert("User Deletion Complete");
+      showModal("Account has been deleted!", () => {
+        localStorage.clear();
+        window.location.href = "/";
+      });
       localStorage.clear();
-      window.location.href = "/";
+      
     } catch(error) {
       console.error("User Deletion Fail:", error);
-      alert("Failed to delete user");
+      showModal("Failed to delete user");
     }
   }
 
@@ -258,8 +276,9 @@ const Settings = () => {
       if (!updateResponse.ok) {
         throw new Error("Failed to update password.");
       }
-  
-      alert("Password changed successfully!");
+
+      showModal("Password changed successfully!", () => window.location.reload());
+
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -271,6 +290,7 @@ const Settings = () => {
 
   }
   
+  /* ========================================= HTML ========================================= */
   return (
     <div>
       <Navbar />
@@ -306,7 +326,7 @@ const Settings = () => {
               <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
 
               <label>Email:</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input type="email" value={email} disabled className="disabled-input" />
 
               <label>Birthday:</label>
               <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
@@ -436,7 +456,11 @@ const Settings = () => {
           selectedSection !== "preferences" && 
           selectedSection !== "password" && (
             <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
+            
           )}
+
+          {/* Show the modal when settings are updated */}
+          {modalMessage && <Modal message={modalMessage} onClose={modalCloseAction} />}
         </div>
       </div>
     </div>
