@@ -180,6 +180,12 @@
     font-size: 14px;
 }
 
+
+/* Preserve username color in dark mode */
+body[data-theme="dark"] .name {
+    color: black !important;
+}
+
 /* Logout button */
 .logout-button {
     background-color: #000;

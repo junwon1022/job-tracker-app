@@ -1,6 +1,6 @@
 /* Apply background to the entire page */
 body {
-  background-color: #f4f4f4;
+  background-color: #ffffff;
   margin: 0;
   height: 100vh;
   display: flex;
@@ -14,7 +14,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f4f4f4;
+  background-color: #ffffff;
 }
 
 .login-form {

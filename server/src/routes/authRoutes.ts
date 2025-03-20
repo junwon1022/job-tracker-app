@@ -257,6 +257,47 @@
       res.json({ success: true });
     });
 
-
+    // Change Password API
+    router.put("/change-password", async (req: Request, res: Response): Promise<void> => {
+      const { userId, currentPassword, newPassword } = req.body;
+      console.log("🔹 Received Change Password Request for User:", userId);
+    
+      try {
+        // Fetch the user with the password field
+        const user = await User.findById(userId).select("+password");
+    
+        if (!user) {
+          console.error("User Not Found:", userId);
+          res.status(404).json({ msg: "User not found" });
+          return;
+        }
+    
+        // Check if current password matches
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+          console.error("Incorrect Password for User:", userId);
+          res.status(401).json({ msg: "Current password is incorrect" });
+          return;
+        }
+    
+        // Ensure new password length
+        if (newPassword.length < 6) {
+          res.status(400).json({ msg: "New password must be at least 6 characters long." });
+          return;
+        }
+    
+        // Hash the new password
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+    
+        console.log("Password Changed Successfully for User:", userId);
+        res.json({ msg: "Password changed successfully!" });
+    
+      } catch (error) {
+        console.error("Error changing password:", error);
+        res.status(500).json({ msg: "Server error" });
+      }
+    });
+    
 
     export default router;

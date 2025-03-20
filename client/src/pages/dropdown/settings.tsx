@@ -24,11 +24,34 @@ const Settings = () => {
   const [notifications, setNotifications] = useState(false);
   const [theme, setTheme] = useState("light");
 
+  // User deletion state
   const [password, setPassword] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+  // Password change state
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  useEffect(() => {
+    // Restore last selected section
+    const savedSection = localStorage.getItem("selectedSection");
+    if (savedSection) {
+      setSelectedSection(savedSection);
+    }
+  
+    // Restore theme preference
+    const savedTheme = localStorage.getItem("theme") || "light"; // Default to light mode
+    document.body.setAttribute("data-theme", savedTheme);
+  
+    // Cleanup: Reset selected section on page exit
+    return () => {
+      localStorage.removeItem("selectedSection");
+    };
+  }, []);
   
   useEffect(() => {
-
     // Fetching user data
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
@@ -84,12 +107,17 @@ const Settings = () => {
 
     fetchUserData();
   }, []);
+
+  // Retrieve last selected section from localStorage
+  const handleSectionChange = (section: string) => {
+    setSelectedSection(section);
+    localStorage.setItem("selectedSection", section); 
+  };
   
   // Handling Save Button
   const handleSaveSettings = async () => {
     try {
       const storedUserId = localStorage.getItem("userId");
-  
       if (!storedUserId) {
         alert("No user ID found!");
         return;
@@ -118,13 +146,15 @@ const Settings = () => {
       if (!response.ok) {
         throw new Error(`Failed to update user in backend: ${response.status}`);
       }
-  
       console.log("Backend updated successfully!");
-  
       alert("Settings updated successfully!");
-      
+
+      // Store the selected section before reloading
+      localStorage.setItem("selectedSection", selectedSection);
+
       // Reload the page
       window.location.reload();
+
     } catch (error) {
       console.error("Upload error:", error);
       alert("Failed to update settings.");
@@ -176,6 +206,70 @@ const Settings = () => {
       alert("Failed to delete user");
     }
   }
+
+  // Handle the theme change (dark, light)
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.body.setAttribute("data-theme", newTheme); // Apply theme to body
+  };
+
+  // Handle the password change
+  const handlePasswordChange = async() => {
+    setPasswordError("");
+
+    
+    if(!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError("All fields are required");
+      return;
+    }
+
+    if(newPassword != confirmPassword) {
+      setPasswordError("New password and confirm password do not match.");
+      return;
+    }
+
+    try {
+      const storedUserId = localStorage.getItem("userId");
+      if (!storedUserId) {
+        setPasswordError("No user ID found.");
+        return;
+      }
+  
+      // Verify current password
+      const verifyResponse = await fetch(`http://localhost:5001/api/auth/verify-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: storedUserId, password: currentPassword }),
+      });
+  
+      if (!verifyResponse.ok) {
+        setPasswordError("Current password is incorrect.");
+        return;
+      }
+  
+      // Update password if verification succeeds
+      const updateResponse = await fetch(`http://localhost:5001/api/auth/change-password`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: storedUserId, currentPassword, newPassword }),
+      });
+  
+      if (!updateResponse.ok) {
+        throw new Error("Failed to update password.");
+      }
+  
+      alert("Password changed successfully!");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordError("");
+  
+    } catch (error) {
+      setPasswordError("Error changing password. Please try again.");
+    }
+
+  }
   
   return (
     <div>
@@ -185,19 +279,19 @@ const Settings = () => {
         <div className="settings-sidebar">
           <h3>Settings</h3>
           <ul>
-            <li onClick={() => setSelectedSection("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
               User Information
             </li>
-            <li onClick={() => setSelectedSection("password")} className={selectedSection === "password" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("password")} className={selectedSection === "password" ? "active" : ""}>
               Change Password
             </li>
-            <li onClick={() => setSelectedSection("cv-upload")} className={selectedSection === "cv-upload" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("cv-upload")} className={selectedSection === "cv-upload" ? "active" : ""}>
               Upload CV
             </li>
-            <li onClick={() => setSelectedSection("preferences")} className={selectedSection === "preferences" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("preferences")} className={selectedSection === "preferences" ? "active" : ""}>
               Preferences
             </li>
-            <li onClick={() => setSelectedSection("delete-account")} className={selectedSection === "delete-account" ? "active" : ""}>
+            <li onClick={() => handleSectionChange("delete-account")} className={selectedSection === "delete-account" ? "active" : ""}>
               Delete Account
             </li>
           </ul>
@@ -238,14 +332,32 @@ const Settings = () => {
           {selectedSection === "password" && (
             <>
               <h2>Change Password</h2>
+              {passwordError && <p className="error-message">{passwordError}</p>}
+
               <label>Current Password:</label>
-              <input type="password" placeholder="Enter current password" />
+              <input
+                type="password"
+                placeholder="Enter current password"
+                value={currentPassword} 
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />  
 
               <label>New Password:</label>
-              <input type="password" placeholder="Enter new password" />
+              <input
+                type="password"
+                placeholder="Enter new password"
+                value={newPassword} 
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
 
               <label>Confirm New Password:</label>
-              <input type="password" placeholder="Confirm new password" />
+              <input
+                type="password"
+                placeholder="Enter Confirm password"
+                value={confirmPassword} 
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button className="save-button" onClick={handlePasswordChange}>Change Password</button>
             </>
           )}
 
@@ -277,10 +389,10 @@ const Settings = () => {
               </label>
 
               <label>Theme:</label>
-              <select value={theme} onChange={(e) => setTheme(e.target.value)}>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-              </select>
+                <select value={theme} onChange={(e) => handleThemeChange(e.target.value)}>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
             </div>
           )}
 
@@ -320,7 +432,9 @@ const Settings = () => {
             </div>
           )}
 
-          {selectedSection !== "delete-account" && (
+          {selectedSection !== "delete-account" && 
+          selectedSection !== "preferences" && 
+          selectedSection !== "password" && (
             <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
           )}
         </div>
