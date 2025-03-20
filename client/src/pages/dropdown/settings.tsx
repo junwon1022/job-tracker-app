@@ -24,8 +24,15 @@ const Settings = () => {
   const [notifications, setNotifications] = useState(false);
   const [theme, setTheme] = useState("light");
 
+  // User deletion state
   const [password, setPassword] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+  // Password change state
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     // Restore last selected section
@@ -154,8 +161,6 @@ const Settings = () => {
     }
   };
 
-
-
   // Handling Delete button
   const handleDeleteAccount = async () => {
     try {
@@ -208,6 +213,63 @@ const Settings = () => {
     localStorage.setItem("theme", newTheme);
     document.body.setAttribute("data-theme", newTheme); // Apply theme to body
   };
+
+  // Handle the password change
+  const handlePasswordChange = async() => {
+    setPasswordError("");
+
+    
+    if(!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError("All fields are required");
+      return;
+    }
+
+    if(newPassword != confirmPassword) {
+      setPasswordError("New password and confirm password do not match.");
+      return;
+    }
+
+    try {
+      const storedUserId = localStorage.getItem("userId");
+      if (!storedUserId) {
+        setPasswordError("No user ID found.");
+        return;
+      }
+  
+      // Verify current password
+      const verifyResponse = await fetch(`http://localhost:5001/api/auth/verify-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: storedUserId, password: currentPassword }),
+      });
+  
+      if (!verifyResponse.ok) {
+        setPasswordError("Current password is incorrect.");
+        return;
+      }
+  
+      // Update password if verification succeeds
+      const updateResponse = await fetch(`http://localhost:5001/api/auth/change-password`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: storedUserId, newPassword }),
+      });
+  
+      if (!updateResponse.ok) {
+        throw new Error("Failed to update password.");
+      }
+  
+      alert("Password changed successfully!");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordError("");
+  
+    } catch (error) {
+      setPasswordError("Error changing password. Please try again.");
+    }
+
+  }
   
   return (
     <div>
@@ -270,14 +332,32 @@ const Settings = () => {
           {selectedSection === "password" && (
             <>
               <h2>Change Password</h2>
+              {passwordError && <p className="error-message">{passwordError}</p>}
+
               <label>Current Password:</label>
-              <input type="password" placeholder="Enter current password" />
+              <input
+                type="password"
+                placeholder="Enter current password"
+                value={currentPassword} 
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />  
 
               <label>New Password:</label>
-              <input type="password" placeholder="Enter new password" />
+              <input
+                type="password"
+                placeholder="Enter new password"
+                value={newPassword} 
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
 
               <label>Confirm New Password:</label>
-              <input type="password" placeholder="Confirm new password" />
+              <input
+                type="password"
+                placeholder="Enter Confirm password"
+                value={confirmPassword} 
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button className="save-button" onClick={handlePasswordChange}>Change Password</button>
             </>
           )}
 
@@ -352,7 +432,9 @@ const Settings = () => {
             </div>
           )}
 
-          {selectedSection !== "delete-account" && selectedSection !== "preferences" && (
+          {selectedSection !== "delete-account" && 
+          selectedSection !== "preferences" && 
+          selectedSection !== "password" && (
             <button className="save-button" onClick={handleSaveSettings}>Save Settings</button>
           )}
         </div>
