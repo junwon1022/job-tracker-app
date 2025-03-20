@@ -252,7 +252,7 @@ const Settings = () => {
       const updateResponse = await fetch(`http://localhost:5001/api/auth/change-password`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: storedUserId, newPassword }),
+        body: JSON.stringify({ userId: storedUserId, currentPassword, newPassword }),
       });
   
       if (!updateResponse.ok) {
