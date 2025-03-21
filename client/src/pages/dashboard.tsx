@@ -4,9 +4,8 @@ import { api } from "../api/api";
 import "../styles/App.css"; 
 import Navbar from "./navbar";
 
-// Define the expected type for your data
 interface Job {
-  _id: String;
+  _id: string;
   company: string;
   position: string;
   status: string;
@@ -14,7 +13,6 @@ interface Job {
 }
 
 const Dashboard = () => {
-  // Define correct type
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
   const [sortOrder, setSortOrder] = useState("date");
@@ -29,7 +27,7 @@ const Dashboard = () => {
     } else {
       if (storedName) {
         setName(storedName);
-      } 
+      }
       fetchJobs();
     }
   }, []);
@@ -37,21 +35,18 @@ const Dashboard = () => {
   const fetchJobs = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found. User might not be logged in.");
-      }
-  
-      const res = await api.get<Job[]>("/jobs", {
+      if (!token) throw new Error("No token found");
+
+      const res = await api.get<Job[]>("/jobs/applied", {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       setJobs(res.data);
     } catch (error) {
       console.error("Error fetching jobs:", error);
     }
   };
 
-  // Sort jobs based on sortOrder
   const sortedJobs = [...jobs].sort((a, b) => {
     if (sortOrder === "date") {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -61,60 +56,57 @@ const Dashboard = () => {
     return 0;
   });
 
+  // Quick stats
+  const total = jobs.length;
+  const interviews = jobs.filter((job) => job.status === "interview").length;
+  const rejections = jobs.filter((job) => job.status === "rejected").length;
+
   return (
     <div className="dashboard-container">
-
-      {/* The navigation bar */}
       <div className="navbar">
         <Navbar /> 
       </div>
 
-      {/* Add job button */}
+      {/* Navigate to Available Jobs */}
       <div className="add-job-container">
-        <button className="add-job-button">+ Add Job</button>
-      </div>
-
-      {/* Job form */}
-      <div className="job-form">
-        <input type="text" placeholder="Job Title" />
-        <input type="text" placeholder="Company" />
-        <select>
-          <option value="applied">Applied</option>
-          <option value="interview">Interview</option>
-          <option value="rejected">Rejected</option>
-        </select>
-        <button className="save-job-button">Save</button>
+        <button className="add-job-button" onClick={() => navigate("/available-jobs")}>
+          Browse Available Jobs
+        </button>
       </div>
 
       {/* Job stats */}
       <div className="job-stats">
         <h3>Job Application Stats</h3>
         <ul>
-          <li><strong>Total Jobs:</strong> 0</li>
-          <li><strong>Interviews Scheduled:</strong> 0</li>
-          <li><strong>Rejected:</strong> 0</li>
+          <li><strong>Total Jobs:</strong> {total}</li>
+          <li><strong>Interviews Scheduled:</strong> {interviews}</li>
+          <li><strong>Rejected:</strong> {rejections}</li>
         </ul>
       </div>
 
-      {/* Filter container */}
+      {/* Filter & Sort */}
       <div className="filter-container">
-        <button className="filter-button">All</button>
-        <button className="filter-button">Applied</button>
-        <button className="filter-button">Interview</button>
-        <button className="filter-button">Rejected</button>
-
-        {/* Sorting the jobs */}
         <select className="sort-dropdown" onChange={(e) => setSortOrder(e.target.value)}>
           <option value="date">Newest First</option>
           <option value="alpha">A-Z</option>
         </select>
       </div>
-      
-      
-      <h2 className="job-list-header">Job List</h2>
+
+      {/* Job List */}
+      <h2 className="job-list-header">Your Applications</h2>
       <div className="job-list">
-        <p>No jobs found. Start tracking your applications!</p>
-        <button className="add-job-button">+ Add Your First Job</button>
+        {sortedJobs.length === 0 ? (
+          <p>No applications yet. Go apply to some jobs!</p>
+        ) : (
+          sortedJobs.map((job) => (
+            <div key={job._id} className="job-entry">
+              <h3>{job.position}</h3>
+              <p>{job.company}</p>
+              <p>Status: <strong>{job.status}</strong></p>
+              <p>Applied: {new Date(job.createdAt).toLocaleDateString()}</p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
