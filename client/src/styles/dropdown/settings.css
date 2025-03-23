@@ -1,3 +1,5 @@
+/* ==================================== Main CSS ====================================*/
+
 body {
   height: 100%;
   margin: 0;
@@ -43,11 +45,35 @@ body {
 }
 
 .settings-sidebar li.active {
-  background: #007bff;
+  background: linear-gradient(135deg, #007bff, #00c6ff);
   color: white;
   font-weight: bold;
+  border-radius: 6px;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
+.settings-sidebar li:hover {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  color: white;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+
+.fade-in {
+  animation: sectionFadeIn 0.4s ease;
+}
+
+@keyframes sectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 
 h2, h3 {
@@ -80,7 +106,7 @@ input[type="checkbox"] {
 .save-button {
   width: 100%;
   padding: 14px;
-  background-color: #007bff;
+  background: linear-gradient(135deg, #007bff, #00c6ff);
   color: white;
   border: none;
   border-radius: 6px;
@@ -90,27 +116,52 @@ input[type="checkbox"] {
 }
 
 .save-button:hover {
-  background-color: #0056b3;
+  background-color: linear-gradient(135deg, #007bff, #0056b3);
+  /* background-color: #0056b3; */
 }
 
+/* ==================================== Section Divider ==================================== */
+.section-divider-full {
+  height: 2px;
+  background-color: black;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  border: none;
+  width: 200%;
+}
+
+.section-divider {
+  height: 2px;
+  background-color: black;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  border: none;
+  width: 100%;
+} 
+
+/* ==================================== CV Upload ====================================*/
+
+.cv-container { 
+  text-align: center;
+}
+
+/* ==================================== User Preference ====================================*/
+
+.preferences-container {
+  text-align: center;
+}
+
+/* ==================================== User Deletion ====================================*/
 .delete-button {
   width: 100%;
   padding: 14px;
-  background-color: #ff0000;
+  background: linear-gradient(135deg, #ff4e50, #f00000);
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
-}
-
-.cv-container { 
-  text-align: center;
-}
-
-.preferences-container {
-  text-align: center;
 }
 
 .delete-account-container {
@@ -191,11 +242,104 @@ input[type="checkbox"] {
   cursor: not-allowed;
 }
 
+/* ==================================== User Information ====================================*/
+
+.user-info-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  margin-left:-260px;
+}
+
+.user-info-fields {
+  max-width: 600px; 
+  width: 100%;
+}
+
+.user-info-fields h2 {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+/* ==================================== User Profile Picture ====================================*/
+
+.user-profile-pic-box {
+  position: absolute;
+  top: 80px;
+  left: 470px;
+}
+
+.user-profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.user-profile-pic:hover {
+  transform: scale(1.05);
+}
+
+.user-profile-placeholder {
+  width: 200px;
+  height: 200px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: #888;
+  cursor: pointer;
+}
 
 
+.profile-pic-label {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.profile-tooltip {
+  visibility: hidden;
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.profile-pic-label:hover .profile-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .user-profile-pic-box {
+    position: relative;
+    top: auto;
+    right: auto;
+    align-self: flex-end;
+    margin-top: 10px;
+  }
+}
 
 
-/* ================================= Dark Theme =================================== */
+/* ==================================== Dark Theme ==================================== */
 body[data-theme="light"], html[data-theme="light"] {
   background-color: #ffffff;
   color: #333;
