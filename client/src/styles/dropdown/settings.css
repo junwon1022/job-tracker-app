@@ -1,3 +1,5 @@
+/* ==================================== Main CSS ====================================*/
+
 body {
   height: 100%;
   margin: 0;
@@ -73,25 +75,6 @@ body {
   }
 }
 
-.section-divider-full {
-  height: 2px;
-  background-color: black;
-  margin-top: -10px;
-  margin-bottom: 25px;
-  border: none;
-  width: 500%;
-} 
-
-
-.section-divider {
-  height: 2px;
-  background-color: black;
-  margin-top: -10px;
-  margin-bottom: 25px;
-  border: none;
-  width: 100%;
-} 
-
 
 h2, h3 {
   margin-bottom: 20px;
@@ -137,6 +120,38 @@ input[type="checkbox"] {
   /* background-color: #0056b3; */
 }
 
+/* ==================================== Section Divider ==================================== */
+.section-divider-full {
+  height: 2px;
+  background-color: black;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  border: none;
+  width: 200%;
+}
+
+.section-divider {
+  height: 2px;
+  background-color: black;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  border: none;
+  width: 100%;
+} 
+
+/* ==================================== CV Upload ====================================*/
+
+.cv-container { 
+  text-align: center;
+}
+
+/* ==================================== User Preference ====================================*/
+
+.preferences-container {
+  text-align: center;
+}
+
+/* ==================================== User Deletion ====================================*/
 .delete-button {
   width: 100%;
   padding: 14px;
@@ -147,14 +162,6 @@ input[type="checkbox"] {
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
-}
-
-.cv-container { 
-  text-align: center;
-}
-
-.preferences-container {
-  text-align: center;
 }
 
 .delete-account-container {
@@ -235,6 +242,7 @@ input[type="checkbox"] {
   cursor: not-allowed;
 }
 
+/* ==================================== User Information ====================================*/
 
 .user-info-layout {
   display: flex;
@@ -244,10 +252,22 @@ input[type="checkbox"] {
   margin-left:-260px;
 }
 
+.user-info-fields {
+  max-width: 600px; 
+  width: 100%;
+}
+
+.user-info-fields h2 {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+/* ==================================== User Profile Picture ====================================*/
+
 .user-profile-pic-box {
   position: absolute;
-  top: 100px;
-  left: 450px;
+  top: 80px;
+  left: 470px;
 }
 
 .user-profile-pic {
@@ -278,10 +298,6 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.user-info-fields {
-  max-width: 600px; 
-  width: 100%;
-}
 
 .profile-pic-label {
   position: relative;
@@ -323,7 +339,7 @@ input[type="checkbox"] {
 }
 
 
-/* ================================= Dark Theme =================================== */
+/* ==================================== Dark Theme ==================================== */
 body[data-theme="light"], html[data-theme="light"] {
   background-color: #ffffff;
   color: #333;

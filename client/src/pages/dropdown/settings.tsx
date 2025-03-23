@@ -375,6 +375,7 @@ const Settings = () => {
             <div className="user-info-layout">
 
               <div className="user-profile-pic-box">
+              <label>Profile Picture</label>
                 <label htmlFor="profile-upload" className="profile-pic-label">
                   {profilePic ? (
                     <img src={profilePic} alt="Profile" className="user-profile-pic" />
