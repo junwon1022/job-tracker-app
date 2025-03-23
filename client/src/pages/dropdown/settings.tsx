@@ -394,7 +394,7 @@ const Settings = () => {
 
               <div className="user-info-fields">
                 <h2>User Information</h2>
-                <div className="section-divider"></div>
+                <div className="section-divider-full"></div>
                 <label>Username:</label>
                 <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
 
