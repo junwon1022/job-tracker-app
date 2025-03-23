@@ -400,7 +400,7 @@ const Settings = () => {
                 <label>Email:</label>
                 <input type="email" value={email} disabled className="disabled-input" />
 
-                <label>Birthday:</label>
+                <label>Date of Birth:</label>
                 <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
 
                 <label>Phone:</label>
