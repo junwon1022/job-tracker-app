@@ -350,7 +350,7 @@ const Settings = () => {
         <div className="settings-sidebar">
 
           <h3>Account</h3>
-          <ul>
+          <ul className="fade-in">
             <li onClick={() => handleSectionChange("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
               User Information
             </li>
