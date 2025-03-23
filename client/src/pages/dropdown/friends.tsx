@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../navbar";
+import "../../styles/dropdown/friends.css"
 
 const Friends = () => {
   return (
