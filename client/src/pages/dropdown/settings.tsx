@@ -394,6 +394,7 @@ const Settings = () => {
 
               <div className="user-info-fields">
                 <h2>User Information</h2>
+                <div className="section-divider"></div>
                 <label>Username:</label>
                 <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
 
@@ -425,6 +426,7 @@ const Settings = () => {
           {selectedSection === "password" && (
             <>
               <h2>Change Password</h2>
+              <div className="section-divider"></div>
               {passwordError && <p className="error-message">{passwordError}</p>}
 
               <label>Current Password:</label>
@@ -458,6 +460,7 @@ const Settings = () => {
           {selectedSection === "cv-upload" && (
             <div className="cv-container">
               <h2>Upload CV</h2>
+              <div className="section-divider"></div>
               <label>Choose File:</label>
               <input type="file" accept=".pdf,.docx" onChange={(e) => setCv(e.target.files?.[0] || null)} />
 
@@ -476,6 +479,7 @@ const Settings = () => {
           {selectedSection === "preferences" && (
             <div className="preferences-container">
               <h2>Preferences</h2>
+              <div className="section-divider"></div>
               <label>
                 <input type="checkbox" checked={notifications} onChange={() => setNotifications(!notifications)} />
                 Enable Notifications
@@ -493,6 +497,7 @@ const Settings = () => {
           {selectedSection === "delete-account" && (
             <div className="delete-account-container">
               <h2>Delete Account</h2>
+              <div className="section-divider"></div>
               <p><strong>Warning:</strong> This action is irreversible. Proceed with caution.</p>
               <button className="delete-button" onClick={() => setDeleteConfirm(true)}>Delete My Account</button>
             </div>
