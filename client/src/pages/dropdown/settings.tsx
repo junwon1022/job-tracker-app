@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/settings.css";
 import Modal from "../modal"; 
+import userIcon from "../../assets/user.png";
 
 const Settings = () => {
 
@@ -41,6 +42,9 @@ const Settings = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  // Profile Picture state
+  const [profilePic, setProfilePic] = useState(userIcon);
+
 
   /* ======================================= Effects ========================================== */
   useEffect(() => {
@@ -58,6 +62,14 @@ const Settings = () => {
     return () => {
       localStorage.removeItem("selectedSection");
     };
+  }, []);
+
+  // Change Profile Picture
+  useEffect(() => {
+    const storedPic = localStorage.getItem("profilePic");
+    if (storedPic) {
+      setProfilePic(storedPic);
+    }
   }, []);
   
   useEffect(() => {
@@ -290,6 +302,44 @@ const Settings = () => {
     }
 
   }
+
+   // Handle Profile Picture Change
+   const handleProfilePicChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+  
+    const storedUserId = localStorage.getItem("userId");
+    if (!storedUserId) {
+      console.error("No valid userId found");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", storedUserId); 
+  
+    try {
+      const response = await fetch("http://localhost:5001/api/profile/upload-profile-pic", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to upload image: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      if (data.profilePic) {
+        const newProfilePic = `http://localhost:5001${data.profilePic}`;
+        localStorage.setItem("profilePic", newProfilePic);
+        window.dispatchEvent(new Event("storage"));
+        setProfilePic(newProfilePic); // Update UI immediately
+      }
+  
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+    }
+  };
   
   /* ========================================= HTML ========================================= */
   return (
@@ -298,6 +348,7 @@ const Settings = () => {
       <div className="settings-page">
         {/* Sidebar */}
         <div className="settings-sidebar">
+
           <h3>Account</h3>
           <ul>
             <li onClick={() => handleSectionChange("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
@@ -321,33 +372,54 @@ const Settings = () => {
         {/* Settings Container */}
         <div className="settings-container">
           {selectedSection === "user-info" && (
-            <>
-              <h2>User Information</h2>
-              <label>Username:</label>
-              <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <div className="user-info-layout">
 
-              <label>Email:</label>
-              <input type="email" value={email} disabled className="disabled-input" />
+              <div className="user-profile-pic-box">
+                <label htmlFor="profile-upload" className="profile-pic-label">
+                  {profilePic ? (
+                    <img src={profilePic} alt="Profile" className="user-profile-pic" />
+                  ) : (
+                    <div className="user-profile-placeholder">+</div>
+                  )}
+                  <span className="profile-tooltip">Click to change picture</span>
+                </label>
+                <input
+                  type="file"
+                  id="profile-upload"
+                  accept="image/*"
+                  onChange={handleProfilePicChange}
+                  style={{ display: "none" }}
+                />
+              </div>
 
-              <label>Birthday:</label>
-              <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
+              <div className="user-info-fields">
+                <h2>User Information</h2>
+                <label>Username:</label>
+                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
 
-              <label>Phone:</label>
-              <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <label>Email:</label>
+                <input type="email" value={email} disabled className="disabled-input" />
 
-              <label>City:</label>
-              <input type="text" value={addressCity} onChange={(e) => setAddressCity(e.target.value)} />
+                <label>Birthday:</label>
+                <input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
 
-              <label>Street:</label>
-              <input type="text" value={addressStreet} onChange={(e) => setAddressStreet(e.target.value)} />
+                <label>Phone:</label>
+                <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
 
-              <label>House Number:</label>
-              <input type="text" value={addressHouseNr} onChange={(e) => setAddressHouseNr(e.target.value)} />
+                <label>City:</label>
+                <input type="text" value={addressCity} onChange={(e) => setAddressCity(e.target.value)} />
 
-              <label>Postcode:</label>
-              <input type="text" value={postcode} onChange={(e) => setPostcode(e.target.value)} />
-            </>
-          )}
+                <label>Street:</label>
+                <input type="text" value={addressStreet} onChange={(e) => setAddressStreet(e.target.value)} />
+
+                <label>House Number:</label>
+                <input type="text" value={addressHouseNr} onChange={(e) => setAddressHouseNr(e.target.value)} />
+
+                <label>Postcode:</label>
+                <input type="text" value={postcode} onChange={(e) => setPostcode(e.target.value)} />
+            </div>
+          </div>
+        )}
 
           {/* Password change Container */}
           {selectedSection === "password" && (
