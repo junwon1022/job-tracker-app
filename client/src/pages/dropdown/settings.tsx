@@ -298,7 +298,7 @@ const Settings = () => {
       <div className="settings-page">
         {/* Sidebar */}
         <div className="settings-sidebar">
-          <h3>Settings</h3>
+          <h3>Account</h3>
           <ul>
             <li onClick={() => handleSectionChange("user-info")} className={selectedSection === "user-info" ? "active" : ""}>
               User Information

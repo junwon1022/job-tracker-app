@@ -176,8 +176,7 @@ const Navbar = () => {
           </p>
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <button className="dropdown-item" onClick={() => navigate("/dropdown/profile")}>Profile</button>
-              <button className="dropdown-item" onClick={() => navigate("/dropdown/settings")}>Settings</button>
+              <button className="dropdown-item" onClick={() => navigate("/dropdown/settings")}>Account</button>
               <button className="dropdown-item" onClick={() => navigate("/dropdown/friends")}>Friends</button>
               <hr />
               <button className="dropdown-item logout" onClick={handleLogout}>Sign out</button>

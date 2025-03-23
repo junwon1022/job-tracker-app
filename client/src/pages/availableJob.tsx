@@ -13,7 +13,7 @@ interface Job {
 const AvailableJobs = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const userId = localStorage.getItem("userId");
-
+ 
   useEffect(() => {
     const fetchAvailableJobs = async () => {
         try {
