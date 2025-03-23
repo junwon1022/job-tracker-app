@@ -138,8 +138,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
-// User Registration
 // User Registration
 router.post("/register", async (req: Request, res: Response): Promise<void> => {
   try {
