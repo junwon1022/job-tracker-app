@@ -162,6 +162,23 @@ const Friends = () => {
         </ul>
       </div>
 
+      {/* Friend List Section */}
+      {selectedSection === "friends" && (
+          <div className="friend-list">
+            <h2>Friends</h2>
+            <div className="section-divider"></div>
+            {friends.length === 0 ? (
+              <p>No friends yet.</p>
+            ) : (
+              <ul>
+                {friends.map((code, idx) => (
+                  <li key={idx}>{code}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
       <div className="friends-container">
         {/* Send Friend Request Section */}
         {selectedSection === "send" && (
@@ -175,23 +192,6 @@ const Friends = () => {
               onChange={(e) => setFriendCodeInput(e.target.value)}
             />
             <button onClick={sendFriendRequest}>Send</button>
-          </div>
-        )}
-
-        {/* Friend List Section */}
-        {selectedSection === "friends" && (
-          <div className="friend-list">
-            <h2>Friends</h2>
-            <div className="section-divider"></div>
-            {friends.length === 0 ? (
-              <p>No friends yet.</p>
-            ) : (
-              <ul>
-                {friends.map((code, idx) => (
-                  <li key={idx}>{code}</li>
-                ))}
-              </ul>
-            )}
           </div>
         )}
 
