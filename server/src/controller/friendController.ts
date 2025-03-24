@@ -65,7 +65,13 @@ export const acceptFriendRequest = async(req: Request, res: Response): Promise<v
     if(!user.friends.includes(requesterCode)) user.friends.push(requesterCode);
     if(!friend.friends.includes(user.friendCode)) friend.friends.push(user.friendCode);
 
+    // Remove the incoming request from current user
     user.friendRequests = user.friendRequests.filter(code => code != requesterCode);
+
+     // Remove the reverse pending request, if it exists
+    if (friend.friendRequests.includes(user.friendCode)) {
+        friend.friendRequests = friend.friendRequests.filter(code => code !== user.friendCode);
+    }
 
     await user.save();
     await friend.save();
