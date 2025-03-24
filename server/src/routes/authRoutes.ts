@@ -260,6 +260,8 @@ router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
       address: user.address || {},
       cv: user.cv || "",
       friendCode: user.friendCode,
+      friends: user.friends || [],
+      friendRequests: user.friendRequests || [],
     });
   } catch (error) {
     console.error("Error fetching user:", error);

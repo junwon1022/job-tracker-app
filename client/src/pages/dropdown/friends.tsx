@@ -24,59 +24,32 @@ const Friends = () => {
   /* =============================== Effects =================================== */
 
   useEffect(() => {
-    // Fetching user data
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
-      const cachedUser = localStorage.getItem("userData");
-
-      if (cachedUser) {
-        //Show cached user data instantly
-        const parsedUser = JSON.parse(cachedUser);
-        setUsername(parsedUser.name);
-        setMyFriendCode(parsedUser.friendCode);
-      }
-
       if (!storedUserId) {
         console.error("No valid userId found in localStorage");
         return;
       }
-
+  
       try {
-        console.log(`Fetching user data from: http://localhost:5001/api/auth/users/${storedUserId}`);
-        
         const response = await fetch(`http://localhost:5001/api/auth/users/${storedUserId}`);
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user data: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`Failed to fetch user data: ${response.status}`);
         const data = await response.json();
-        console.log("Fetched user data:", data);
-
-        // Cache the new user data
+  
+        // Set all user state
+        setUsername(data.name);
+        setMyFriendCode(data.friendCode);
+        setFriends(data.friends || []);
+        setFriendRequests(data.friendRequests || []);
+  
+        // Cache it
         localStorage.setItem("userData", JSON.stringify(data));
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-
+  
     fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    const fetchFriendData = async () => {
-      try {
-        const res = await fetch(`http://localhost:5001/api/auth/users/${userId}`);
-        const data = await res.json();
-        setUsername(data.name);
-        setFriends(data.friends || []);
-        setFriendRequests(data.friendRequests || []);
-      } catch (error) {
-        console.error("Error fetching friend data:", error);
-      }
-    };
-
-    fetchFriendData();
   }, []);
 
   useEffect(() => {
@@ -114,6 +87,7 @@ const Friends = () => {
       });
 
       const data = await res.json();
+      console.log("Fetched user data:", data);
       alert(data.msg);
       setFriendCodeInput("");
     } catch (error) {
