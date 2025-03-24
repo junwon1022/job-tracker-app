@@ -42,22 +42,35 @@ const UserSchema = new mongoose.Schema<IUser>({
     createdAt: { type: Date, default: Date.now },
 });
 
-// Use `validate` hook so it's triggered even during `.create()`
+// Create friend code
 UserSchema.pre("validate", async function (next) {
     if (!this.friendCode) {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        let existing;
-
-        do {
-            code = Array.from({ length: 6 }, () => characters[Math.floor(Math.random() * characters.length)]).join('');
-            existing = await (this.constructor as mongoose.Model<IUser>).findOne({ friendCode: code });
-        } while (existing);
-
-        this.friendCode = code;
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const maxAttempts = 5;
+      let code = '';
+      let existing = null;
+  
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        code = Array.from({ length: 6 }, () =>
+          characters[Math.floor(Math.random() * characters.length)]
+        ).join('');
+  
+        existing = await (this.constructor as mongoose.Model<IUser>).findOne({ friendCode: code });
+  
+        if (!existing) {
+          this.friendCode = code;
+          break;
+        }
+      }
+  
+      if (existing) {
+        return next(new Error("Failed to generate a unique friend code after multiple attempts."));
+      }
     }
+  
     next();
-});
+  }
+);
 
 const UserModel = mongoose.model<IUser>("User", UserSchema);
 export default UserModel;
