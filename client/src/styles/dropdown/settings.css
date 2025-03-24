@@ -57,8 +57,8 @@ input[type="checkbox"] {
 }
 
 .save-button:hover {
-  background-color: linear-gradient(135deg, #007bff, #0056b3);
-  /* background-color: #0056b3; */
+  transform: scale(1.01);
+  background: linear-gradient(135deg, #004288, #015cbd);
 }
 
 /* ==================================== Side bar ====================================*/
@@ -156,13 +156,18 @@ input[type="checkbox"] {
 .delete-button {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #ff4e50, #f00000);
+  background: linear-gradient(135deg, #f00000, #ff4e50);
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
+}
+
+.delete-button:hover {
+  transform: scale(1.01);
+  background: linear-gradient(135deg, #c20101, #dd4346);
 }
 
 .delete-account-container {

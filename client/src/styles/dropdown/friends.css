@@ -36,79 +36,98 @@ margin-left: 10px;
 /* ==================================== Side bar ====================================*/
 
 .friends-sidebar {
-    position: fixed; 
-    top: 50px;
-    left: 0;
-    width: 20%;
-    min-width: 180px;
-    max-width: 250px;
-    height: 100vh;
-    padding: 20px;
-    background: #f8f9fa;
-    border-right: 1px solid #ddd;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .friends-sidebar h3 {
-    margin-bottom: 10px;
-  }
-  
-  .friends-sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .friends-sidebar li {
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .friends-sidebar li.active {
-    background: linear-gradient(135deg, #007bff, #00c6ff);
-    color: white;
-    font-weight: bold;
-    border-radius: 6px;
-    transition: background 0.4s ease, color 0.4s ease;
-  }
-  
-  .friends-sidebar li:hover {
-    background: linear-gradient(135deg, #007bff, #00c6ff);
-    color: white;
-    border-radius: 6px;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-  
-  
-  .fade-in {
-    animation: sectionFadeIn 0.4s ease;
-  }
-  
-  @keyframes sectionFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  position: fixed; 
+  top: 50px;
+  left: 0;
+  width: 20%;
+  min-width: 180px;
+  max-width: 250px;
+  height: 100vh;
+  padding: 20px;
+  background: #f8f9fa;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
 
-  /* ==================================== Section Divider ==================================== */
-.section-divider-full {
-    height: 2px;
-    background-color: black;
-    margin-top: -10px;
-    margin-bottom: 25px;
-    border: none;
-    width: 200%;
+.friends-sidebar h3 {
+  margin-bottom: 10px;
+}
+
+.friends-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.friends-sidebar li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.friends-sidebar li.active {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.friends-sidebar li:hover {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  color: white;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+
+.fade-in {
+  animation: sectionFadeIn 0.4s ease;
+}
+
+@keyframes sectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .section-divider {
-    height: 2px;
-    background-color: black;
-    margin-top: -10px;
-    margin-bottom: 25px;
-    border: none;
-    width: 100%;
-  } 
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================================== Section Divider ==================================== */
+.section-divider-full {
+  height: 2px;
+  background-color: black;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  border: none;
+  width: 200%;
+}
+
+.section-divider {
+  height: 2px;
+  background-color: black;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  border: none;
+  width: 100%;
+} 
+
+/* ==================================== Copy to Clipboard ==================================== */
+
+.copy-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #00c965, #52f86e);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.copy-button:hover {
+  transform: scale(1.01);
+  background: linear-gradient(135deg, #00aa55, #4ae063);
+}

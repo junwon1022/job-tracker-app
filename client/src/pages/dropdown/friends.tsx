@@ -5,14 +5,20 @@ import "../../styles/dropdown/friends.css";
 const Friends = () => {
   /* =============================== State initializations =================================== */
   // Controls which section is displayed
-  const [selectedSection, setSelectedSection] = useState("user-info"); 
+  const [selectedSection, setSelectedSection] = useState("friends"); 
 
+  // User information
   const [username, setUsername] = useState("");
   const [friendCodeInput, setFriendCodeInput] = useState("");
   const [friends, setFriends] = useState<string[]>([]);
   const [friendRequests, setFriendRequests] = useState<string[]>([]);
   const [myFriendCode, setMyFriendCode] = useState("");
 
+  // Copy Friend Id to clipboard
+  const [copied, setCopied] = useState(false);
+
+
+  // User ID fetch from localstorage
   const userId = localStorage.getItem("userId");
 
   /* =============================== Effects =================================== */
@@ -152,6 +158,14 @@ const Friends = () => {
     }
   };
 
+  const handleCopyFriendCode = () => {
+    navigator.clipboard.writeText(myFriendCode).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  };
+  
+
   return (
   <div>
     <Navbar />
@@ -231,7 +245,12 @@ const Friends = () => {
           <div className="friend-code-section">
             <h2>Your Friend Code</h2>
             <div className="section-divider"></div>
-            <p className="friend-code-display">{myFriendCode}</p>
+            <div className="friend-code-wrapper">
+              <p className="friend-code-display">{myFriendCode}</p>
+              <button className="copy-button" onClick={handleCopyFriendCode}>
+                {copied ? "Copied!" : "Copy"}
+              </button>
+            </div>
           </div>
         )}
       </div>
