@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/friends.css";
+import defaultAvatar from "../../assets/user.png";
 
 const Friends = () => {
   /* =============================== State initializations =================================== */
@@ -10,9 +11,16 @@ const Friends = () => {
   // User information
   const [username, setUsername] = useState("");
   const [friendCodeInput, setFriendCodeInput] = useState("");
-  const [friends, setFriends] = useState<string[]>([]);
+  const [friends, setFriends] = useState<Friend[]>([]);
   const [friendRequests, setFriendRequests] = useState<string[]>([]);
   const [myFriendCode, setMyFriendCode] = useState("");
+
+  interface Friend {
+    name: string;
+    friendCode: string;
+    profilePic?: string;
+  }
+  
 
   // Copy Friend Id to clipboard
   const [copied, setCopied] = useState(false);
@@ -106,9 +114,15 @@ const Friends = () => {
       const data = await res.json();
       alert(data.msg);
 
+      // Fetch friend details
+      const friendRes = await fetch(`http://localhost:5001/api/auth/user-by-code/${code}`);
+      const newFriend = await friendRes.json();
+
+      console.log("Fetched new friend:", newFriend);
+
       // Update UI
       setFriendRequests(prev => prev.filter(c => c !== code));
-      setFriends(prev => [...prev, code]);
+      setFriends(prev => [...prev, newFriend]);
     } catch (error) {
       console.error("Error accepting request:", error);
     }
@@ -171,8 +185,17 @@ const Friends = () => {
               <p>No friends yet.</p>
             ) : (
               <ul>
-                {friends.map((code, idx) => (
-                  <li key={idx}>{code}</li>
+                {friends.map((friend, idx) => (
+                  <li key={idx} className="friend-item">
+                    <div className="friend-icon-container">
+                      <img
+                        src={friend.profilePic? `http://localhost:5001${friend.profilePic}`: defaultAvatar}
+                        alt={friend.name || "Friend"}
+                        className="friend-avatar"
+                      />
+                    </div>
+                    <span>{friend.name} ({friend.friendCode})</span>
+                  </li>
                 ))}
               </ul>
             )}

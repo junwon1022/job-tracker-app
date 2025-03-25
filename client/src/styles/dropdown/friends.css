@@ -153,3 +153,41 @@ margin-left: 10px;
   transform: scale(1.01);
   background: linear-gradient(135deg, #00aa55, #4ae063);
 }
+
+/* ==================================== Friend List Management ==================================== */
+
+.friend-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ccc; 
+  padding: 2px; 
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2); 
+  margin-left: -30px;
+}
+
+.friend-icon-container:hover {
+  transform: scale(1.05);
+} 
+
+/* Default user icon */
+.friend-avatar {
+  width: 45x; 
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover; 
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.friend-item span {
+  font-size: 24px;
+}

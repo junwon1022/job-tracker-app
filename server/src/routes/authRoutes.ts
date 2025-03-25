@@ -250,6 +250,9 @@ router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const friends = await User.find({ friendCode: { $in: user.friends } })
+      .select("friendCode name profilePic");
+
     res.json({
       id: user.id.toString(),
       name: user.name,
@@ -260,7 +263,7 @@ router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
       address: user.address || {},
       cv: user.cv || "",
       friendCode: user.friendCode,
-      friends: user.friends || [],
+      friends,
       friendRequests: user.friendRequests || [],
     });
   } catch (error) {
@@ -268,6 +271,25 @@ router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// Get user by friendCode (used in acceptRequest)
+router.get("/user-by-code/:code", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findOne({ friendCode: req.params.code })
+      .select("name friendCode profilePic");
+
+    if (!user) {
+      res.status(404).json({ msg: "User not found" });
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user by friendCode:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 
 
 // PUT a user by ID
