@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import User from "../models/User"; // Import the User model
+import User from "../models/User";
 
 const router = express.Router();
 

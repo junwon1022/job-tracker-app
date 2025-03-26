@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
-import { body, validationResult } from "express-validator";
 import User from "../models/User";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
