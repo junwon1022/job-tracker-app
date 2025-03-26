@@ -16,6 +16,52 @@ body {
   height: auto;
 }
 
+
+h2, h3 {
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+label {
+  display: block;
+  margin: 15px 0 5px;
+  font-weight: bold;
+  text-align: left;
+}
+
+input, select {
+  width: calc(100% - 20px);
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+}
+
+.save-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.save-button:hover {
+  transform: scale(1.01);
+  background: linear-gradient(135deg, #004288, #015cbd);
+}
+
+/* ==================================== Side bar ====================================*/
 .settings-sidebar {
   position: fixed; 
   top: 50px;
@@ -75,51 +121,6 @@ body {
   }
 }
 
-
-h2, h3 {
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: 600;
-}
-
-label {
-  display: block;
-  margin: 15px 0 5px;
-  font-weight: bold;
-  text-align: left;
-}
-
-input, select {
-  width: calc(100% - 20px);
-  padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-input[type="checkbox"] {
-  width: auto;
-  margin-right: 8px;
-}
-
-.save-button {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #007bff, #00c6ff);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.save-button:hover {
-  background-color: linear-gradient(135deg, #007bff, #0056b3);
-  /* background-color: #0056b3; */
-}
-
 /* ==================================== Section Divider ==================================== */
 .section-divider-full {
   height: 2px;
@@ -155,13 +156,18 @@ input[type="checkbox"] {
 .delete-button {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #ff4e50, #f00000);
+  background: linear-gradient(135deg, #f00000, #ff4e50);
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
+}
+
+.delete-button:hover {
+  transform: scale(1.01);
+  background: linear-gradient(135deg, #c20101, #dd4346);
 }
 
 .delete-account-container {

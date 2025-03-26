@@ -71,6 +71,24 @@ const Settings = () => {
       setProfilePic(storedPic);
     }
   }, []);
+
+  // Change Profile Picture immediately (wait for update events)
+  useEffect(() => {
+    const updateProfilePic = () => {
+      const storedPic = localStorage.getItem("profilePic");
+      if (storedPic) {
+        setProfilePic(storedPic);
+      }
+    };
+  
+    // Listen for profile pic updates
+    window.addEventListener("storage", updateProfilePic);
+  
+    return () => {
+      window.removeEventListener("storage", updateProfilePic);
+    };
+  }, []);
+  
   
   useEffect(() => {
     // Fetching user data
@@ -333,7 +351,7 @@ const Settings = () => {
         const newProfilePic = `http://localhost:5001${data.profilePic}`;
         localStorage.setItem("profilePic", newProfilePic);
         window.dispatchEvent(new Event("storage"));
-        setProfilePic(newProfilePic); // Update UI immediately
+        setProfilePic(newProfilePic);
       }
   
     } catch (error) {

@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
-import { body, validationResult } from "express-validator";
 import User from "../models/User";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
@@ -138,8 +137,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
-// User Registration
 // User Registration
 router.post("/register", async (req: Request, res: Response): Promise<void> => {
   try {
@@ -252,6 +249,9 @@ router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const friends = await User.find({ friendCode: { $in: user.friends } })
+      .select("friendCode name profilePic");
+
     res.json({
       id: user.id.toString(),
       name: user.name,
@@ -261,12 +261,34 @@ router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
       phone: user.phone || "",
       address: user.address || {},
       cv: user.cv || "",
+      friendCode: user.friendCode,
+      friends,
+      friendRequests: user.friendRequests || [],
     });
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// Get user by friendCode (used in acceptRequest)
+router.get("/user-by-code/:code", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findOne({ friendCode: req.params.code })
+      .select("name friendCode profilePic");
+
+    if (!user) {
+      res.status(404).json({ msg: "User not found" });
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user by friendCode:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 
 
 // PUT a user by ID

@@ -3,6 +3,7 @@ import express, { Application } from "express";
 import authRoutes from "./routes/authRoutes";
 import jobRoutes from "./routes/jobRoutes";
 import profileRoutes from "./routes/profileRoutes";
+import friendRoutes from "./routes/friendRoutes";
 import path from "path";
 import dotenv from "dotenv";
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
@@ -36,6 +37,7 @@ app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/friends", friendRoutes);
 
 // Define a basic route to check if the API is running
 app.get("/", (req, res) => {
