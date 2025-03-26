@@ -4,60 +4,6 @@ max-width: 700px;
 margin: auto;
 }
 
-.send-request-section {
-margin-bottom: 2rem;
-}
-
-.send-request-section input {
-padding: 10px;
-margin-right: 10px;
-width: 300px;
-}
-
-.send-request-section button {
-padding: 10px 20px;
-}
-
-.friend-list, .friend-requests {
-margin-bottom: 2rem;
-}
-
-.request-item {
-display: flex;
-justify-content: space-between;
-align-items: center;
-max-width: 400px;
-}
-
-.request-item button {
-margin-left: 10px;
-}
-
-
-.friend-list {
-  max-width: 600px; 
-  width: 100%;
-  position: absolute;
-  left: 280px;
-  top: 52px;
-}
-
-.friend-list h2 {
-  text-align: left;
-  margin-left: 40px;
-}
-
-.friend-list ul{
-  text-align: left;
-}
-
-.friend-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-}
-
 /* ==================================== Side bar ====================================*/
 
 .friends-sidebar {
@@ -120,14 +66,6 @@ margin-left: 10px;
 }
 
 /* ==================================== Section Divider ==================================== */
-.section-divider-full {
-  height: 2px;
-  background-color: black;
-  margin-top: -10px;
-  margin-bottom: 25px;
-  border: none;
-  width: 200%;
-}
 
 .section-divider-friends {
   height: 2px;
@@ -135,7 +73,7 @@ margin-left: 10px;
   margin-top: -10px;
   margin-bottom: 25px;
   border: none;
-  width: 200%;
+  width: 100%;
   margin-left: 40px;
 } 
 
@@ -147,25 +85,25 @@ margin-left: 10px;
   border: none;
   width: 100%;
 } 
-
-/* ==================================== Copy to Clipboard ==================================== */
-
-.copy-button {
+  
+/* ==================================== Friend page ====================================*/
+.friend-list {
+  max-width: 806px; 
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #00c965, #52f86e);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
+  position: absolute;
+  left: 304px;
+  top: 52px;
 }
 
-.copy-button:hover {
-  transform: scale(1.01);
-  background: linear-gradient(135deg, #00aa55, #4ae063);
+.friend-list h2 {
+  text-align: left;
+  margin-left: 40px;
 }
+
+.friend-list ul{
+  text-align: left;
+}
+
 
 /* ==================================== Friend List Management ==================================== */
 
@@ -218,4 +156,59 @@ margin-left: 10px;
 
 .friend-item span {
   font-size: 24px;
+}
+
+/* ==================================== Friend request page ====================================*/
+.send-request-section {
+  margin-bottom: 2rem;
+}
+  
+.send-request-section input {
+  padding: 10px;
+  margin-right: 10px;
+  width: 300px;
+}
+  
+.send-request-section button {
+  padding: 10px 20px;
+}
+  
+.friend-list, .friend-requests {
+  margin-bottom: 2rem;
+}
+  
+.request-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 400px;
+}
+
+.send-button {
+  background: linear-gradient(135deg, #00c965, #52f86e);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ==================================== Copy to Clipboard ==================================== */
+
+.copy-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #00c965, #52f86e);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.copy-button:hover {
+  transform: scale(1.01);
+  background: linear-gradient(135deg, #00aa55, #4ae063);
 }

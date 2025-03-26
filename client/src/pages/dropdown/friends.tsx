@@ -214,7 +214,7 @@ const Friends = () => {
               value={friendCodeInput}
               onChange={(e) => setFriendCodeInput(e.target.value)}
             />
-            <button onClick={sendFriendRequest}>Send</button>
+            <button className="send-button" onClick={sendFriendRequest}>Send</button>
           </div>
         )}
 
