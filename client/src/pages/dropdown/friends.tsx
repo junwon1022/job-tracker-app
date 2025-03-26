@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/friends.css";
 import defaultAvatar from "../../assets/user.png";
+import Modal from "../modal"; 
 
 const Friends = () => {
   /* =============================== State initializations =================================== */
@@ -14,6 +15,10 @@ const Friends = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [friendRequests, setFriendRequests] = useState<string[]>([]);
   const [myFriendCode, setMyFriendCode] = useState("");
+
+  // State to handle modal visibility
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
+  const [modalCloseAction, setModalCloseAction] = useState<() => void>(() => {});
 
   interface Friend {
     name: string;
@@ -35,7 +40,7 @@ const Friends = () => {
     const fetchUserData = async () => {
       const storedUserId = localStorage.getItem("userId");
       if (!storedUserId) {
-        console.error("No valid userId found in localStorage");
+        console.error("No valid userId fo  in localStorage");
         return;
       }
   
@@ -152,8 +157,14 @@ const Friends = () => {
       setTimeout(() => setCopied(false), 1500);
     });
   };
-  
 
+  // Show modals
+  const showModal = (message: string, closeAction: () => void = () => setModalMessage(null)) => {
+    setModalMessage(message);
+    setModalCloseAction(() => closeAction);
+  };
+  
+  /* ======================================== HTML ============================================== */
   return (
   <div>
     <Navbar />
