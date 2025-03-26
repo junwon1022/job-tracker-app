@@ -180,7 +180,7 @@ const Friends = () => {
       {selectedSection === "friends" && (
           <div className="friend-list">
             <h2>Friends</h2>
-            <div className="section-divider"></div>
+            <div className="section-divider-friends"></div>
             {friends.length === 0 ? (
               <p>No friends yet.</p>
             ) : (

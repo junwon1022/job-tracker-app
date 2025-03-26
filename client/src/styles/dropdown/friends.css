@@ -38,11 +38,16 @@ margin-left: 10px;
   max-width: 600px; 
   width: 100%;
   position: absolute;
-  left: 339px;
+  left: 280px;
   top: 52px;
 }
 
-.friend-list h2, ul {
+.friend-list h2 {
+  text-align: left;
+  margin-left: 40px;
+}
+
+.friend-list ul{
   text-align: left;
 }
 
@@ -52,7 +57,6 @@ margin-left: 10px;
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-  margin-left:-260px;
 }
 
 /* ==================================== Side bar ====================================*/
@@ -126,6 +130,16 @@ margin-left: 10px;
   width: 200%;
 }
 
+.section-divider-friends {
+  height: 2px;
+  background-color: black;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  border: none;
+  width: 100%;
+  margin-left: 40px;
+} 
+
 .section-divider {
   height: 2px;
   background-color: black;
@@ -156,9 +170,13 @@ margin-left: 10px;
 
 /* ==================================== Friend List Management ==================================== */
 
+.friend-item {
+  margin-right: 30px;
+}
+
 .friend-icon-container {
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-color: #ffffff;
   display: flex;
@@ -166,9 +184,10 @@ margin-left: 10px;
   justify-content: center;
   border: 2px solid #ccc; 
   padding: 2px; 
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2); 
-  margin-left: -30px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  margin-right: 10px;
 }
+
 
 .friend-icon-container:hover {
   transform: scale(1.05);
@@ -176,10 +195,11 @@ margin-left: 10px;
 
 /* Default user icon */
 .friend-avatar {
-  width: 45x; 
-  height: 45px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  object-fit: cover; 
+  object-fit: cover;
+  display: block;
 }
 
 .friend-item {
