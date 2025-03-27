@@ -104,6 +104,10 @@ margin: auto;
   text-align: left;
 }
 
+.friend-list p{
+  margin-top: 180px;
+  font-size: 24px;
+}
 
 /* ==================================== Friend List Management ==================================== */
 
