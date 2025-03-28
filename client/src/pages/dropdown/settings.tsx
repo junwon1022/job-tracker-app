@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/settings.css";
-import Modal from "../modal"; 
+import Modal from "../modal/modal"; 
 import userIcon from "../../assets/user.png";
 
 const Settings = () => {
