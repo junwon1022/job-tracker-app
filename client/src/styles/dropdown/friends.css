@@ -216,3 +216,19 @@ margin: auto;
   transform: scale(1.01);
   background: linear-gradient(135deg, #00aa55, #4ae063);
 }
+
+
+.delete-friend-button {
+  margin-left: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.delete-friend-button:hover {
+  background-color: #d9363e;
+}

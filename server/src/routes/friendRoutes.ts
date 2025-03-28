@@ -11,6 +11,6 @@ const router = express.Router();
 router.post("/send-request", sendFriendRequest);
 router.post("/accept-request", acceptFriendRequest);
 router.post("/reject-request", rejectFriendRequest);
-router.delete("/remove", deleteFriend);
+router.delete("/delete", deleteFriend);
 
 export default router;

@@ -3,6 +3,7 @@ import Navbar from "../navbar";
 import "../../styles/dropdown/friends.css";
 import defaultAvatar from "../../assets/user.png";
 import Modal from "../modal"; 
+import ConfirmModal from "../confirmModal";
 
 const Friends = () => {
   /* =============================== State initializations =================================== */
@@ -17,15 +18,15 @@ const Friends = () => {
   const [myFriendCode, setMyFriendCode] = useState("");
 
   // State to handle modal visibility
-  const [modalMessage, setModalMessage] = useState<string | null>(null);
-  const [modalCloseAction, setModalCloseAction] = useState<() => void>(() => {});
+  const [confirmModalMessage, setConfirmModalMessage] = useState<string | null>(null);
+  const [confirmAction, setConfirmAction] = useState<() => void>(() => {});
+
 
   interface Friend {
     name: string;
     friendCode: string;
     profilePic?: string;
   }
-  
 
   // Copy Friend Id to clipboard
   const [copied, setCopied] = useState(false);
@@ -151,6 +152,24 @@ const Friends = () => {
     }
   };
 
+  const deleteFriend = async (code: string) => {
+    try{
+      const res = await fetch("http://localhost:5001/api/friends/delete", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({userId, friendCode: code}),
+      });
+
+      const data = await res.json();
+      alert(data.msg || "Friend Deleted");
+
+      setFriends(prev => prev.filter(friend => friend.friendCode !== code));
+    } catch(error) {
+      console.error("Error deleting friend:", error);
+      alert("Failed to delete friend.");
+    }
+  }
+
   const handleCopyFriendCode = () => {
     navigator.clipboard.writeText(myFriendCode).then(() => {
       setCopied(true);
@@ -159,9 +178,15 @@ const Friends = () => {
   };
 
   // Show modals
-  const showModal = (message: string, closeAction: () => void = () => setModalMessage(null)) => {
-    setModalMessage(message);
-    setModalCloseAction(() => closeAction);
+  const showConfirmModal = (
+    message: string,
+    onConfirm: () => void
+  ) => {
+    setConfirmModalMessage(message);
+    setConfirmAction(() => () => {
+      onConfirm();
+      setConfirmModalMessage(null);
+    });
   };
   
   /* ======================================== HTML ============================================== */
@@ -195,20 +220,33 @@ const Friends = () => {
             {friends.length === 0 ? (
               <p>No friends yet.</p>
             ) : (
+
               <ul>
                 {friends.map((friend, idx) => (
                   <li key={idx} className="friend-item">
                     <div className="friend-icon-container">
                       <img
-                        src={friend.profilePic? `http://localhost:5001${friend.profilePic}`: defaultAvatar}
+                        src={friend.profilePic ? `http://localhost:5001${friend.profilePic}` : defaultAvatar}
                         alt={friend.name || "Friend"}
                         className="friend-avatar"
                       />
                     </div>
                     <span>{friend.name} ({friend.friendCode})</span>
+                    <button
+                      className="delete-friend-button"
+                      onClick={() =>
+                        showConfirmModal(
+                          `Remove ${friend.name} from friends?`,
+                          () => deleteFriend(friend.friendCode)
+                        )
+                      }
+                    >
+                      Delete
+                    </button>
                   </li>
                 ))}
               </ul>
+
             )}
           </div>
         )}
@@ -263,6 +301,15 @@ const Friends = () => {
         )}
       </div>
     </div>
+    
+    {confirmModalMessage && (
+      <ConfirmModal
+        message={confirmModalMessage}
+        onConfirm={confirmAction}
+        onCancel={() => setConfirmModalMessage(null)}
+      />
+    )}
+
   </div>
   );
 };
