@@ -155,9 +155,9 @@ const Friends = () => {
   const deleteFriend = async (code: string) => {
     try{
       const res = await fetch("http://localhost:5001/api/friends/delete", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({userId, friendCode: code}),
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, friendCode: code }),
       });
 
       const data = await res.json();
