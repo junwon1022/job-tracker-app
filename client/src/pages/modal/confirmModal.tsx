@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/modal.css";
+import "../../styles/modal/confirmModal.css";
 
 interface ConfirmModalProps {
   message: string;
@@ -13,8 +13,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ message, onConfirm, onCance
       <div className="modal-content">
         <p>{message}</p>
         <div className="modal-buttons">
-          <button onClick={onConfirm} className="modal-button confirm">OK</button>
-          <button onClick={onCancel} className="modal-button cancel">Cancel</button>
+          <button className="modal-button" onClick={onConfirm}>OK</button>
+          <button className="modal-button cancel" onClick={onCancel}>Cancel</button>
         </div>
       </div>
     </div>
