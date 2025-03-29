@@ -68,7 +68,7 @@
 }
 
 .modal-button {
-  background: #007bff;
+  background: linear-gradient(135deg, #007bff, #00c6ff);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -78,15 +78,15 @@
 }
 
 .modal-button:hover {
-  background: #0056b3;
+  background: linear-gradient(135deg, #004288, #015cbd);
 }
 
 /* Optional: cancel button override */
 .modal-button.cancel {
-  background: #e0e0e0;
+  background: linear-gradient(135deg, #f00000, #ff4e50);
   color: #333;
 }
 
 .modal-button.cancel:hover {
-  background: #c8c8c8;
+  background: linear-gradient(135deg, #c20101, #dd4346);
 }
