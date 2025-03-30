@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/friends.css";
 import defaultAvatar from "../../assets/user.png";
-import Modal from "../modal/modal"; 
 import ConfirmModal from "../modal/confirmModal";
 
 const Friends = () => {
