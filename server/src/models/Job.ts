@@ -1,11 +1,9 @@
 // Import shortid
 const shortid = require('shortid');
 import mongoose, { Document } from "mongoose";
-import User from "../models/User";
 
 interface IJob extends Document {
     _id: String;
-    user: mongoose.Types.ObjectId;
     company: string;
     position: string;
     status: string;
@@ -16,10 +14,6 @@ const JobSchema = new mongoose.Schema({
     _id: {
         type: String,
         default: shortid.generate // Generate a shorter unique ID
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
     },
     company: {
         type: String,

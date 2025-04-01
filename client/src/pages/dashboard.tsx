@@ -37,9 +37,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      const res = await api.get<Job[]>("/jobs/applied", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get<Job[]>("/jobs");
 
       setJobs(res.data);
     } catch (error) {

@@ -10,11 +10,11 @@ interface AuthenticatedRequest extends Request {
 
 const router = Router();
 
-// 📌 Create a New Job (Protected Route)
-router.post('/', authMiddleware, [
+// Create a New Job (Protected Route)
+router.post('/', [
     body('company', 'Company is required').notEmpty(),
     body('position', 'Position is required').notEmpty(),
-], async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+], async (req: Request, res: Response): Promise<void> => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         res.status(400).json({ errors: errors.array() });
@@ -25,7 +25,6 @@ router.post('/', authMiddleware, [
         const { company, position } = req.body;
 
         const newJob = new Job({
-            user: req.user?.id,
             company,
             position
         });
@@ -39,8 +38,8 @@ router.post('/', authMiddleware, [
     }
 });
 
-// 📌 Get All Jobs for a User (Protected Route)
-router.get('/', authMiddleware, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+// Get All Jobs for a User (Protected Route)
+router.get('/', async (req: Request, res: Response): Promise<void> => {
     try {
         const jobs = await Job.find({ user: req.user?.id }).sort({ createdAt: -1 });
         res.json(jobs);
@@ -50,8 +49,8 @@ router.get('/', authMiddleware, async (req: AuthenticatedRequest, res: Response)
     }
 });
 
-// 📌 Update a Job (Protected Route)
-router.put("/:id", authMiddleware, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+// Update a Job (Protected Route)
+router.put("/:id", async (req: Request, res: Response): Promise<void> => {
     const { company, position, status } = req.body;
 
     try {
@@ -59,12 +58,6 @@ router.put("/:id", authMiddleware, async (req: AuthenticatedRequest, res: Respon
 
         if (!job) {
             res.status(404).json({ msg: 'Job not found' });
-            return;
-        }
-
-        // Check if user owns the job
-        if (job.user.toString() !== req.user?.id) {
-            res.status(401).json({ msg: 'Unauthorized' });
             return;
         }
 
@@ -81,19 +74,13 @@ router.put("/:id", authMiddleware, async (req: AuthenticatedRequest, res: Respon
     }
 });
 
-// 📌 Delete a Job (Protected Route)
-router.delete('/:id', authMiddleware, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+// Delete a Job (Protected Route)
+router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
     try {
         let job = await Job.findById(req.params.id);
 
         if (!job) {
             res.status(404).json({ msg: 'Job not found' });
-            return;
-        }
-
-        // Check if user owns the job
-        if (job.user.toString() !== req.user?.id) {
-            res.status(401).json({ msg: 'Unauthorized' });
             return;
         }
 
