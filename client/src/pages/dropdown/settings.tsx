@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../navbar";
 import "../../styles/dropdown/settings.css";
-import Modal from "../modal"; 
+import Modal from "../modal/modal"; 
 import userIcon from "../../assets/user.png";
 
 const Settings = () => {
@@ -480,7 +480,7 @@ const Settings = () => {
             <div className="cv-container">
               <h2>Upload CV</h2>
               <div className="section-divider"></div>
-              <label>Choose File:</label>
+              {/* <label>Choose File:</label> */}
               <input type="file" accept=".pdf,.docx" onChange={(e) => setCv(e.target.files?.[0] || null)} />
 
               {uploadedCv && (
