@@ -18,6 +18,10 @@ const Dashboard = () => {
   const [sortOrder, setSortOrder] = useState("date");
   const navigate = useNavigate();
 
+  const [newCompany, setNewCompany] = useState("");
+  const [newPosition, setNewPosition] = useState("");
+  const [newStatus, setNewStatus] = useState("");
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedName = localStorage.getItem("userName");
@@ -37,7 +41,9 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      const res = await api.get<Job[]>("/jobs");
+      const res = await api.get<Job[]>("/jobs/applied", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       setJobs(res.data);
     } catch (error) {
@@ -69,6 +75,50 @@ const Dashboard = () => {
       <div className="add-job-container">
         <button className="add-job-button" onClick={() => navigate("/available-jobs")}>
           Browse Available Jobs
+        </button>
+      </div>
+
+      {/* Add New Job */}
+      <div className="new-job-form">
+        <h3>Add a Job</h3>
+        <input
+          type="text"
+          placeholder="Company"
+          value={newCompany}
+          onChange={(e) => setNewCompany(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Position"
+          value={newPosition}
+          onChange={(e) => setNewPosition(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Status"
+          value={newStatus}
+          onChange={(e) => setNewStatus(e.target.value)}
+        />
+        <button
+          onClick={async () => {
+            if (!newCompany || !newPosition) return alert("Please fill in both fields");
+            try {
+              await api.post("/jobs", {
+                company: newCompany,
+                position: newPosition,
+                status: newStatus,
+              });
+              setNewCompany("");
+              setNewPosition("");
+              setNewStatus("");
+              fetchJobs(); // refresh list
+            } catch (err) {
+              console.error("Error adding job:", err);
+              alert("Failed to add job");
+            }
+          }}
+        >
+          Add Job
         </button>
       </div>
 

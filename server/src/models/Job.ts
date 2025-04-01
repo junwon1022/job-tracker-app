@@ -3,17 +3,18 @@ const shortid = require('shortid');
 import mongoose, { Document } from "mongoose";
 
 interface IJob extends Document {
-    _id: String;
+    _id: string;
     company: string;
     position: string;
     status: string;
     createdAt: Date;
+    applicants: [string];
 }
 
 const JobSchema = new mongoose.Schema({
     _id: {
         type: String,
-        default: shortid.generate // Generate a shorter unique ID
+        default: shortid.generate
     },
     company: {
         type: String,
@@ -31,7 +32,11 @@ const JobSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    applicants: [{
+        type: [String],
+        ref: 'User'
+    }]
 });
 
 export default mongoose.model<IJob>("Job", JobSchema);
