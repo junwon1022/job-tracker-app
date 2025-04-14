@@ -44,44 +44,22 @@ router.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-// POST /jobs/apply - User applies to a job
-router.post("/apply", async (req: Request, res: Response) => {
-  const { jobId, userId } = req.body;
-  if (!jobId || !userId) {
-    res.status(400).json({ message: "Missing jobId or userId" });
-    return;
-  }
+// DELETE job by ID
+router.delete("/:id", async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
 
   try {
-    const job = await Job.findById(jobId);
-    if (!job) {
+    const deletedJob = await Job.findByIdAndDelete(id);
+    if (!deletedJob) {
       res.status(404).json({ message: "Job not found" });
       return;
     }
-
-    if (job.applicants.includes(userId)) {
-      res.status(400).json({ message: "User has already applied to this job" });
-      return;
-    }
-
-    job.applicants.push(userId);
-    await job.save();
-
-    res.status(200).json({ message: "Applied successfully", job });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    res.status(200).json({ message: "Job deleted successfully", job: deletedJob });
+  } catch (err: any) {
+    console.error("Error deleting job:", err.message);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
-// GET /jobs/applied - Get user's applied jobs (requires auth)
-router.get("/applied", authMiddleware, async (req: Request, res: Response) => {
-  try {
-    const userId = req.user?.id;
-    const jobs = await Job.find({ applicants: userId });
-    res.json(jobs);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 export default router;
