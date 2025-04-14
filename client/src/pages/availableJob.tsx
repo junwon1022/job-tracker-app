@@ -18,7 +18,7 @@ const AvailableJobs = () => {
     const fetchAvailableJobs = async () => {
         try {
           console.log("Fetching available jobs..."); 
-          const res = await api.get<Job[]>("/available-jobs"); 
+          const res = await api.get<Job[]>("/api/jobs");
           console.log("Response data:", res.data); 
           setJobs(res.data);
         } catch (err) {
@@ -30,10 +30,7 @@ const AvailableJobs = () => {
 
   const handleApply = async (jobId: string) => {
     try {
-      const res = await api.post("/jobs/apply", {
-        jobId,
-        userId,
-      });
+      await api.post("/api/jobs/apply", { jobId, userId });
       alert("Applied successfully!");
     } catch (err) {
       console.error("Error applying to job", err);

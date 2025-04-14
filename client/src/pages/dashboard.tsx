@@ -12,6 +12,8 @@ interface Job {
   createdAt: Date;
 }
 
+const storedUserId = localStorage.getItem("userId");
+
 const Dashboard = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
@@ -41,9 +43,11 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      const res = await api.get<Job[]>("/jobs/applied", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get<Job[]>(`http://localhost:5001/api/jobs/`);
+
+      // const res = await api.get<Job[]>("/jobs/applied", {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // });
 
       setJobs(res.data);
     } catch (error) {
@@ -93,25 +97,30 @@ const Dashboard = () => {
           value={newPosition}
           onChange={(e) => setNewPosition(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Status"
-          value={newStatus}
-          onChange={(e) => setNewStatus(e.target.value)}
-        />
+        <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
+          <option value="pending">Pending</option>
+          <option value="interview">Interview</option>
+          <option value="rejected">Rejected</option>
+          <option value="hired">Hired</option>
+        </select>
+        
         <button
           onClick={async () => {
             if (!newCompany || !newPosition) return alert("Please fill in both fields");
             try {
-              await api.post("/jobs", {
+              await api.post(`http://localhost:5001/api/jobs/`, {
                 company: newCompany,
                 position: newPosition,
                 status: newStatus,
+              }, {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
               });
               setNewCompany("");
               setNewPosition("");
               setNewStatus("");
-              fetchJobs(); // refresh list
+              fetchJobs();
             } catch (err) {
               console.error("Error adding job:", err);
               alert("Failed to add job");
