@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 import Navbar from "./navbar";
+import "../styles/availableJob.css";
 
 interface Job {
   _id: string;
@@ -26,6 +27,8 @@ const AvailableJobs = () => {
     fetchAvailableJobs();
   }, []);
 
+
+  // Method to fetch the jobs
   const fetchAvailableJobs = async () => {
     try {
       console.log("Fetching available jobs..."); 
@@ -37,6 +40,7 @@ const AvailableJobs = () => {
     }
   };
 
+  //  Method to sort the jobs
   const sortedJobs = [...jobs].sort((a, b) => {
     if (sortOrder === "date") {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -45,6 +49,20 @@ const AvailableJobs = () => {
     }
     return 0;
   });
+
+  // Deleting a job by id
+  const handleDelete = async (jobId: string) => {
+    if (!window.confirm("Are you sure you want to delete this job?")) return;
+  
+    try {
+      await api.delete(`/jobs/${jobId}`);
+      alert("Job deleted successfully.");
+      fetchAvailableJobs(); // Refresh the list
+    } catch (err) {
+      console.error("Error deleting job", err);
+      alert("Failed to delete job.");
+    }
+  };
 
   return (
     <div className="dashboard-container">
@@ -87,7 +105,7 @@ const AvailableJobs = () => {
               });
               setNewCompany("");
               setNewPosition("");
-              setNewStatus("");
+              setNewStatus("pending");
               fetchAvailableJobs();
             } catch (err) {
               console.error("Error adding job:", err);
@@ -116,6 +134,9 @@ const AvailableJobs = () => {
           sortedJobs.map((job) => (
             <div key={job._id} className="job-entry">
               <h3>{job.position}</h3>
+              <button className="delete-button" onClick={() => handleDelete(job._id)}>
+                Delete
+              </button>
               <p>{job.company}</p>
               <p>Status: <strong>{job.status}</strong></p>
               <p>Applied: {new Date(job.createdAt).toLocaleDateString()}</p>
@@ -123,6 +144,7 @@ const AvailableJobs = () => {
           ))
         )}
       </div>
+
     </div>
   );
 };

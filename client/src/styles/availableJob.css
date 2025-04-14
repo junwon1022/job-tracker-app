@@ -2,3 +2,22 @@
   padding: 1rem 0;
   border-bottom: 1px solid #ccc;
 }
+
+
+/* ==================================== Job Deletion ====================================*/
+.delete-button {
+    width: 20%;
+    padding: 14px;
+    background: linear-gradient(135deg, #f00000, #ff4e50);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .delete-button:hover {
+    transform: scale(1.01);
+    background: linear-gradient(135deg, #c20101, #dd4346);
+  }
