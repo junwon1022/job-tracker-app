@@ -1,4 +1,3 @@
-// src/components/AvailableJobs.tsx
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 import Navbar from "./navbar";
@@ -7,58 +6,45 @@ interface Job {
   _id: string;
   company: string;
   position: string;
+  status: string;
   createdAt: Date;
 }
-
 
 const AvailableJobs = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const userId = localStorage.getItem("userId");
+
+  // Const for ordering the jobs
+  const [sortOrder, setSortOrder] = useState("date");
   
+  // Fields for Job
   const [newCompany, setNewCompany] = useState("");
   const [newPosition, setNewPosition] = useState("");
-  const [newStatus, setNewStatus] = useState("");
+  const [newStatus, setNewStatus] = useState("pending");
  
   useEffect(() => {
-    const fetchAvailableJobs = async () => {
-        try {
-          console.log("Fetching available jobs..."); 
-          const res = await api.get<Job[]>("/api/jobs");
-          console.log("Response data:", res.data); 
-          setJobs(res.data);
-        } catch (err) {
-          console.error("Error fetching jobs", err);
-        }
-      };
     fetchAvailableJobs();
   }, []);
 
-  const handleApply = async (jobId: string) => {
+  const fetchAvailableJobs = async () => {
     try {
-      await api.post("/api/jobs/apply", { jobId, userId });
-      alert("Applied successfully!");
-    } catch (err) {
-      console.error("Error applying to job", err);
-      alert("Failed to apply.");
-    }
-  };
-
-  const fetchJobs = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("No token found");
-
+      console.log("Fetching available jobs..."); 
       const res = await api.get<Job[]>(`http://localhost:5001/api/jobs/`);
-
-      // const res = await api.get<Job[]>("/jobs/applied", {
-      //   headers: { Authorization: `Bearer ${token}` },
-      // });
-
+      console.log("Response data:", res.data); 
       setJobs(res.data);
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
+    } catch (err) {
+      console.error("Error fetching jobs", err);
     }
   };
+
+  const sortedJobs = [...jobs].sort((a, b) => {
+    if (sortOrder === "date") {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    } else if (sortOrder === "alpha") {
+      return a.position.localeCompare(b.position);
+    }
+    return 0;
+  });
 
   return (
     <div className="dashboard-container">
@@ -90,7 +76,7 @@ const AvailableJobs = () => {
           onClick={async () => {
             if (!newCompany || !newPosition) return alert("Please fill in both fields");
             try {
-              await api.post(`http://localhost:5001/api/jobs/`, {
+              await api.post<Job[]>(`http://localhost:5001/api/jobs/`, {
                 company: newCompany,
                 position: newPosition,
                 status: newStatus,
@@ -102,7 +88,7 @@ const AvailableJobs = () => {
               setNewCompany("");
               setNewPosition("");
               setNewStatus("");
-              fetchJobs();
+              fetchAvailableJobs();
             } catch (err) {
               console.error("Error adding job:", err);
               alert("Failed to add job");
@@ -113,18 +99,30 @@ const AvailableJobs = () => {
         </button>
       </div>
 
+      {/* Filter & Sort */}
+      <div className="filter-container">
+        <select className="sort-dropdown" onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="date">Newest First</option>
+          <option value="alpha">A-Z</option>
+        </select>
+      </div>
 
-      <h2>Available Jobs</h2>
-      {jobs.map((job) => (
-        <div key={job._id} className="job-list">
-          <h3>{job.position}</h3>
-          <p>{job.company}</p>
-          <p>Posted on: {new Date(job.createdAt).toLocaleDateString()}</p>
-          <button className="save-job-button" onClick={() => handleApply(job._id)}>
-            Apply
-          </button>
-        </div>
-      ))}
+      {/* Job List */}
+      <h2 className="job-list-header">Your Applications</h2>
+      <div className="job-list">
+        {sortedJobs.length === 0 ? (
+          <p>No applications yet. Go apply to some jobs!</p>
+        ) : (
+          sortedJobs.map((job) => (
+            <div key={job._id} className="job-entry">
+              <h3>{job.position}</h3>
+              <p>{job.company}</p>
+              <p>Status: <strong>{job.status}</strong></p>
+              <p>Applied: {new Date(job.createdAt).toLocaleDateString()}</p>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
