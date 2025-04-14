@@ -12,10 +12,10 @@ interface IJob extends Document {
 }
 
 const JobSchema = new mongoose.Schema({
-    _id: {
-        type: String,
-        default: shortid.generate
-    },
+    // _id: {
+    //     type: String,
+    //     default: shortid.generate
+    // },
     company: {
         type: String,
         required: true
@@ -34,7 +34,7 @@ const JobSchema = new mongoose.Schema({
         default: Date.now
     },
     applicants: [{
-        type: [String],
+        type: String,
         ref: 'User'
     }]
 });
