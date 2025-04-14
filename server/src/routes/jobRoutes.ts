@@ -47,6 +47,12 @@ router.get("/", async (_req: Request, res: Response) => {
 // DELETE job by ID
 router.delete("/:id", async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
+  console.log("Requested delete ID:", id);
+
+  const job = await Job.findById(id);
+  if (!job) {
+    console.warn("No job found with ID:", id);
+  }
 
   try {
     const deletedJob = await Job.findByIdAndDelete(id);
