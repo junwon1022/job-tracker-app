@@ -10,7 +10,9 @@ router.post(
   "/",
   body("company").notEmpty(),
   body("position").notEmpty(),
-  body("status").notEmpty(),
+  body("location").notEmpty(),
+  body("jobType").notEmpty(),
+  body("description").notEmpty(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -18,12 +20,14 @@ router.post(
       return;
     }
 
-    const { company, position, status } = req.body;
+    const { company, position, location, jobType, description } = req.body;
     try {
       const newJob = new Job({
         company,
         position,
-        status,
+        location,
+        jobType,
+        description,
       });
       await newJob.save();
       res.status(201).json(newJob);

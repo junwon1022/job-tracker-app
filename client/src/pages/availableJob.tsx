@@ -8,9 +8,12 @@ interface Job {
   _id: string;
   company: string;
   position: string;
-  status: string;
   createdAt: Date;
+  location?: string;
+  jobType?: 'Full-time' | 'Part-time' | 'Remote' | 'Contract';
+  description?: string;
 }
+
 
 const AvailableJobs = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -26,10 +29,12 @@ const AvailableJobs = () => {
   // Const for ordering the jobs
   const [sortOrder, setSortOrder] = useState("date");
   
-  // Fields for Job
+  // Form fields
   const [newCompany, setNewCompany] = useState("");
   const [newPosition, setNewPosition] = useState("");
-  const [newStatus, setNewStatus] = useState("pending");
+  const [newLocation, setNewLocation] = useState("");
+  const [newJobType, setNewJobType] = useState<Job["jobType"]>("Full-time");
+  const [newDescription, setNewDescription] = useState("");
  
   useEffect(() => {
     fetchAvailableJobs();
@@ -71,12 +76,6 @@ const AvailableJobs = () => {
     }
   };
 
-  // Show modals
-  const showModal = (message: string, closeAction: () => void = () => setModalMessage(null)) => {
-    setModalMessage(message);
-    setModalCloseAction(() => closeAction);
-  };
-
   return (
     <div className="dashboard-container">
       <Navbar />
@@ -98,16 +97,30 @@ const AvailableJobs = () => {
           value={newPosition}
           onChange={(e) => setNewPosition(e.target.value)}
         />
-        <select 
-          value={newStatus}
+        <input
+          type="text"
+          className="form-input"
+          placeholder="Location"
+          value={newLocation}
+          onChange={(e) => setNewLocation(e.target.value)}
+        />
+        <select
+          value={newJobType}
           className="form-select"
-          onChange={(e) => setNewStatus(e.target.value)}>
-          
-          <option value="pending">Pending</option>
-          <option value="interview">Interview</option>
-          <option value="rejected">Rejected</option>
-          <option value="hired">Hired</option>
+          onChange={(e) => setNewJobType(e.target.value as Job["jobType"])}
+        >
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Remote">Remote</option>
+          <option value="Contract">Contract</option>
         </select>
+        <textarea
+          className="form-input"
+          placeholder="Job Description"
+          value={newDescription}
+          onChange={(e) => setNewDescription(e.target.value)}
+          rows={4}
+        />
         
         <button
           className="submit-button"
@@ -117,15 +130,21 @@ const AvailableJobs = () => {
               await api.post<Job[]>(`http://localhost:5001/api/jobs/`, {
                 company: newCompany,
                 position: newPosition,
-                status: newStatus,
+                location: newLocation,
+                jobType: newJobType,
+                description: newDescription,
               }, {
                 headers: {
                   'Content-Type': 'application/json',
                 }
               });
+
+              // Reset fields
               setNewCompany("");
               setNewPosition("");
-              setNewStatus("pending");
+              setNewLocation("");
+              setNewJobType("Full-time");
+              setNewDescription("");
               fetchAvailableJobs();
             } catch (err) {
               console.error("Error adding job:", err);
@@ -164,9 +183,11 @@ const AvailableJobs = () => {
                 </button>
               </div>
 
-              <p>{job.company}</p>
-              <p>Status: <strong>{job.status}</strong></p>
-              <p>Applied: {new Date(job.createdAt).toLocaleDateString()}</p>
+              <p><strong>Company:</strong> {job.company}</p>
+              {job.location && <p><strong>Location:</strong> {job.location}</p>}
+              {job.jobType && <p><strong>Job Type:</strong> {job.jobType}</p>}
+              {job.description && <p>{job.description.slice(0, 100)}...</p>}
+              <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
             </div>
           ))
         )}

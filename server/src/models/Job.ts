@@ -6,37 +6,48 @@ interface IJob extends Document {
     _id: string;
     company: string;
     position: string;
-    status: string;
+    location: string;
+    jobType: 'Full-time' | 'Part-time' | 'Remote' | 'Contract';
+    description: string;
     createdAt: Date;
-    applicants: [string];
-}
+    applicants: string[];
+  }
 
-const JobSchema = new mongoose.Schema({
+  const JobSchema = new mongoose.Schema({
     _id: {
-        type: String,
-        default: shortid.generate
+      type: String,
+      default: shortid.generate
     },
     company: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     position: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
-    status: {
-        type: String,
-        enum: ['pending', 'interview', 'rejected', 'hired'],
-        default: 'pending'
+    location: {
+      type: String,
+      required: false
+    },
+    jobType: {
+      type: String,
+      enum: ['Full-time', 'Part-time', 'Remote', 'Contract'],
+      required: false
+    },
+    description: {
+      type: String,
+      required: false
     },
     createdAt: {
-        type: Date,
-        default: Date.now
+      type: Date,
+      default: Date.now
     },
     applicants: [{
-        type: String,
-        ref: 'User'
+      type: String,
+      ref: 'User'
     }]
-});
+  });
+  
 
 export default mongoose.model<IJob>("Job", JobSchema);
