@@ -35,6 +35,8 @@ const AvailableJobs = () => {
   const [newLocation, setNewLocation] = useState("");
   const [newJobType, setNewJobType] = useState<Job["jobType"]>("Full-time");
   const [newDescription, setNewDescription] = useState("");
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
  
   useEffect(() => {
     fetchAvailableJobs();
@@ -81,80 +83,96 @@ const AvailableJobs = () => {
       <Navbar />
 
       {/* Add New Job */}
-      <div className="new-job-form">
-        <h3>Add a Job</h3>
-        <input
-          type="text"
-          className="form-input"
-          placeholder="Company"
-          value={newCompany}
-          onChange={(e) => setNewCompany(e.target.value)}
-        />
-        <input
-          type="text"
-          className="form-input"
-          placeholder="Position"
-          value={newPosition}
-          onChange={(e) => setNewPosition(e.target.value)}
-        />
-        <input
-          type="text"
-          className="form-input"
-          placeholder="Location"
-          value={newLocation}
-          onChange={(e) => setNewLocation(e.target.value)}
-        />
-        <select
-          value={newJobType}
-          className="form-select"
-          onChange={(e) => setNewJobType(e.target.value as Job["jobType"])}
-        >
-          <option value="Full-time">Full-time</option>
-          <option value="Part-time">Part-time</option>
-          <option value="Remote">Remote</option>
-          <option value="Contract">Contract</option>
-        </select>
-        <textarea
-          className="form-input"
-          placeholder="Job Description"
-          value={newDescription}
-          onChange={(e) => setNewDescription(e.target.value)}
-          rows={4}
-        />
-        
-        <button
-          className="submit-button"
-          onClick={async () => {
-            if (!newCompany || !newPosition) return alert("Please fill in both fields");
-            try {
-              await api.post<Job[]>(`http://localhost:5001/api/jobs/`, {
-                company: newCompany,
-                position: newPosition,
-                location: newLocation,
-                jobType: newJobType,
-                description: newDescription,
-              }, {
-                headers: {
-                  'Content-Type': 'application/json',
-                }
-              });
-
-              // Reset fields
-              setNewCompany("");
-              setNewPosition("");
-              setNewLocation("");
-              setNewJobType("Full-time");
-              setNewDescription("");
-              fetchAvailableJobs();
-            } catch (err) {
-              console.error("Error adding job:", err);
-              alert("Failed to add job");
-            }
-          }}
-        >
-          Add Job
+      <div className="new-job-form-launch">
+        <button className="submit-button" onClick={() => setIsFormOpen(true)}>
+          + Add a Job
         </button>
       </div>
+
+      {isFormOpen && (
+        <div className="add-job-modal-overlay">
+          <div className="add-job-modal">
+            <h2>Add a New Job</h2>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Company"
+              value={newCompany}
+              onChange={(e) => setNewCompany(e.target.value)}
+            />
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Position"
+              value={newPosition}
+              onChange={(e) => setNewPosition(e.target.value)}
+            />
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Location"
+              value={newLocation}
+              onChange={(e) => setNewLocation(e.target.value)}
+            />
+            <select
+              value={newJobType}
+              className="form-select"
+              onChange={(e) => setNewJobType(e.target.value as Job["jobType"])}>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Remote">Remote</option>
+              <option value="Contract">Contract</option>
+            </select>
+            <textarea
+              className="form-input"
+              placeholder="Job Description"
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              rows={4}
+            />
+
+            <div className="modal-buttons">
+              <button
+                className="submit-button"
+                onClick={async () => {
+                  if (!newCompany || !newPosition) return alert("Please fill in both fields");
+                  try {
+                    await api.post<Job[]>(`http://localhost:5001/api/jobs/`, {
+                      company: newCompany,
+                      position: newPosition,
+                      location: newLocation,
+                      jobType: newJobType,
+                      description: newDescription,
+                    }, {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      }
+                    });
+
+                    // Reset & close
+                    setNewCompany("");
+                    setNewPosition("");
+                    setNewLocation("");
+                    setNewJobType("Full-time");
+                    setNewDescription("");
+                    setIsFormOpen(false);
+                    fetchAvailableJobs();
+                  } catch (err) {
+                    console.error("Error adding job:", err);
+                    alert("Failed to add job");
+                  }
+                }}
+              >
+                Submit
+              </button>
+              <button className="cancel-button" onClick={() => setIsFormOpen(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Filter & Sort */}
       <div className="filter-container">
