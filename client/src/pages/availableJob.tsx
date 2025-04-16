@@ -174,6 +174,10 @@ const AvailableJobs = () => {
       )}
 
 
+      
+
+      {/* Job List */}
+      <h2 className="job-list-header">Open Jobs</h2>
       {/* Filter & Sort */}
       <div className="filter-container">
         <select className="sort-dropdown" onChange={(e) => setSortOrder(e.target.value)}>
@@ -181,9 +185,6 @@ const AvailableJobs = () => {
           <option value="alpha">A-Z</option>
         </select>
       </div>
-
-      {/* Job List */}
-      <h2 className="job-list-header">Open Jobs</h2>
       <div className="job-list">
         {sortedJobs.length === 0 ? (
           <p>No jobs are open yet!</p>
