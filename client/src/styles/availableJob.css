@@ -15,16 +15,33 @@
   font-size: 1.1rem;
 }
 
-/* ==================================== Job List Entries ====================================*/
+/* ==================================== Job List & Entries ====================================*/
+
+.job-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
 .job-entry {
+  width: 100%;
+  max-width: 48%;
   background: #ffffff;
   border: 1px solid #dedede;
   border-left: 4px solid #00be5f;
   border-radius: 12px;
   padding: 1.5rem;
-  margin-bottom: 1.2rem;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .job-entry {
+    max-width: 100%;
+  }
 }
 
 .job-entry p {
