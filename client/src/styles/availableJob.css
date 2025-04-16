@@ -17,23 +17,30 @@
 
 /* ==================================== Job List Entries ====================================*/
 .job-entry {
-  background: #fff;
-  border: 1px solid #e1e1e1;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  border: 1px solid #dedede;
+  border-left: 4px solid #00be5f;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 }
 
 .job-entry p {
-  margin: 0.3rem 0;
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  color: #555;
 }
 
 .job-entry:hover {
-  background-color: #f9f9f9;
-  transition: background 0.2s ease-in-out;
+  transform: translateY(-3px);
+  background-color: #fdfdfd;
 }
 
+.job-entry strong {
+  color: #222;
+}
 /* ==================================== Job Addition ====================================*/
 .form-input{
   width: 100%;
@@ -161,4 +168,16 @@
 
 .trash-button:hover {
   transform: scale(1.2);
+}
+
+/* ==================================== Job tag ====================================*/
+.job-tag {
+  display: inline-block;
+  background-color: #e0f7f1;
+  color: #007d57;
+  font-size: 0.75rem;
+  padding: 0.3em 0.6em;
+  border-radius: 12px;
+  margin-right: 0.5em;
+  font-weight: bold;
 }

@@ -173,6 +173,7 @@ const AvailableJobs = () => {
           sortedJobs.map((job) => (
             <div key={job._id} className="job-entry">
               <div className="job-header">
+                {job.jobType && <span className="job-tag">{job.jobType}</span>}
                 <h3>{job.position}</h3>
                 <button
                   className="trash-button"
@@ -183,11 +184,10 @@ const AvailableJobs = () => {
                 </button>
               </div>
 
-              <p><strong>Company:</strong> {job.company}</p>
-              {job.location && <p><strong>Location:</strong> {job.location}</p>}
-              {job.jobType && <p><strong>Job Type:</strong> {job.jobType}</p>}
+              <p><strong>🏢 Company:</strong> {job.company}</p>
+              {job.location && <p><strong>📍 Location:</strong> {job.location}</p>}
+              <p><strong>🕒 Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
               {job.description && <p>{job.description.slice(0, 100)}...</p>}
-              <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
             </div>
           ))
         )}
