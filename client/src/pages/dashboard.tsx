@@ -12,6 +12,8 @@ interface Job {
   createdAt: Date;
 }
 
+const storedUserId = localStorage.getItem("userId");
+
 const Dashboard = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [name, setName] = useState("");
@@ -37,24 +39,13 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      const res = await api.get<Job[]>("/jobs/applied", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get<Job[]>(`http://localhost:5001/api/jobs/`);
 
       setJobs(res.data);
     } catch (error) {
       console.error("Error fetching jobs:", error);
     }
   };
-
-  const sortedJobs = [...jobs].sort((a, b) => {
-    if (sortOrder === "date") {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    } else if (sortOrder === "alpha") {
-      return a.position.localeCompare(b.position);
-    }
-    return 0;
-  });
 
   // Quick stats
   const total = jobs.length;
@@ -84,30 +75,7 @@ const Dashboard = () => {
         </ul>
       </div>
 
-      {/* Filter & Sort */}
-      <div className="filter-container">
-        <select className="sort-dropdown" onChange={(e) => setSortOrder(e.target.value)}>
-          <option value="date">Newest First</option>
-          <option value="alpha">A-Z</option>
-        </select>
-      </div>
 
-      {/* Job List */}
-      <h2 className="job-list-header">Your Applications</h2>
-      <div className="job-list">
-        {sortedJobs.length === 0 ? (
-          <p>No applications yet. Go apply to some jobs!</p>
-        ) : (
-          sortedJobs.map((job) => (
-            <div key={job._id} className="job-entry">
-              <h3>{job.position}</h3>
-              <p>{job.company}</p>
-              <p>Status: <strong>{job.status}</strong></p>
-              <p>Applied: {new Date(job.createdAt).toLocaleDateString()}</p>
-            </div>
-          ))
-        )}
-      </div>
     </div>
   );
 };

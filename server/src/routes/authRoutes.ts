@@ -241,8 +241,6 @@ router.get("/", async (req, res) => {
 // GET a user by ID
 router.get("/users/:id", async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("Fetching user with ID:", req.params.id);
-
     const user = await User.findById(req.params.id).exec();
     if (!user) {
       res.status(404).json({ message: "User not found" });

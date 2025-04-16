@@ -1,0 +1,246 @@
+/* ==================================== Job Header ====================================*/
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; 
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.job-header h3 {
+  margin: 0;
+  padding-left: 8px; 
+  padding-top: 0px;
+  font-size: 1.1rem;
+}
+
+
+/* ==================================== Job List & Entries ====================================*/
+
+.job-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.job-entry {
+  width: 100%;
+  max-width: 48%;
+  background: #ffffff;
+  border: 1px solid #dedede;
+  border-left: 4px solid #00be5f;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .job-entry {
+    max-width: 100%;
+  }
+}
+
+.job-entry p {
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.job-entry:hover {
+  transform: translateY(-3px);
+  background-color: #fdfdfd;
+}
+
+.job-entry strong {
+  color: #222;
+}
+/* ==================================== Job Addition ====================================*/
+.add-job-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.add-job-modal {
+  background: white;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+  animation: scaleFade 0.3s ease-out;
+}
+
+@keyframes scaleFade {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.form-input{
+  width: 100%;
+}
+
+.form-select{
+  width: 100%;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.submit-button,
+.cancel-button {
+  flex: 1;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.submit-button {
+  background-color: #00be5f;
+  color: white;
+}
+
+.cancel-button {
+  background-color: red;
+  color: white;
+}
+
+/* ==================================== Filter Container ====================================*/
+.filter-container{
+  width: 100%;
+}
+
+/* ==================================== Job Deletion ====================================*/
+.delete-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #f00000, #ff4e50);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.delete-button:hover {
+  transform: scale(1.01);
+  background: linear-gradient(135deg, #c20101, #dd4346);
+}
+
+.delete-account-container {
+  text-align: center;
+}
+
+
+/* Account Deletion Confirmation pop-up slider fade in animation*/
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.deletion-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: slideFadeIn 0.5s ease-out forwards;
+}
+
+.deletion-confirm-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-20px);
+  opacity: 0;
+  animation: slideFadeIn 0.5s ease-out forwards;
+}
+
+/* ==================================== Trash Button ====================================*/
+.trash-button {
+  background: none;
+  border: 1px solid #e1e1e1;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 10px;
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.trash-button:hover {
+  transform: scale(1.2);
+}
+
+/* ==================================== Job tag ====================================*/
+.job-tag {
+  display: inline-block;
+  background-color: #e0f7f1;
+  color: #007d57;
+  font-size: 0.75rem;
+  padding: 0.3em 0.6em;
+  border-radius: 12px;
+  margin-right: 0.5em;
+  font-weight: bold;
+}
+
+/* ==================================== Filter container ====================================*/
+.job-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.job-list-header {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+.filter-container {
+  width: auto;
+}

@@ -5,6 +5,7 @@ import Register from "./register";
 import Setting from "./dropdown/settings";
 import Friends from "./dropdown/friends";
 import Profile from "./dropdown/profile";
+import AvailableJobs from "./availableJob";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/dropdown/settings" element={<Setting />} />
         <Route path="/dropdown/friends" element={<Friends />} />
         <Route path="/dropdown/profile" element={<Profile />} />
+        <Route path="/available-jobs" element={<AvailableJobs />} />
       </Routes>
     </Router>
   );
