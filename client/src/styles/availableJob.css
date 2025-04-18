@@ -22,13 +22,20 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem;
+  row-gap: 1.5rem;
+  column-gap: 1.5rem;
   padding: 1rem;
+  width: 800px;
+  height: 600px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
 }
 
 .job-entry {
   width: 100%;
-  max-width: 48%;
+  max-width: 380px;
+  min-height: 200px;
   background: #ffffff;
   border: 1px solid #dedede;
   border-left: 4px solid #00be5f;
@@ -37,6 +44,9 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @media (max-width: 768px) {
