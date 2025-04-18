@@ -19,11 +19,9 @@
 /* ==================================== Job List & Entries ====================================*/
 
 .job-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  row-gap: 1.5rem;
-  column-gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 fixed columns */
+  gap: 1.5rem;
   padding: 1rem;
   width: 800px;
   height: 600px;
@@ -33,9 +31,8 @@
 }
 
 .job-entry {
-  width: 100%;
-  max-width: 380px;
-  min-height: 200px;
+  height: 220px;     
+  max-width: 320px;
   background: #ffffff;
   border: 1px solid #dedede;
   border-left: 4px solid #00be5f;
@@ -43,11 +40,11 @@
   padding: 1.5rem;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 
 @media (max-width: 768px) {
   .job-entry {
