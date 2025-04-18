@@ -36,7 +36,12 @@ const AvailableJobs = () => {
   const [newJobType, setNewJobType] = useState<Job["jobType"]>("Full-time");
   const [newDescription, setNewDescription] = useState("");
 
+  // Job form opener
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  // Job page handle
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 10;
  
   useEffect(() => {
     fetchAvailableJobs();
@@ -65,6 +70,13 @@ const AvailableJobs = () => {
     }
     return 0;
   });
+
+  // Pagination logic
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = sortedJobs.slice(indexOfFirstJob, indexOfLastJob);
+
+  const totalPages = Math.ceil(sortedJobs.length / jobsPerPage);
 
   // Deleting a job by id
   const handleDelete = async (jobId: string) => {
@@ -189,7 +201,7 @@ const AvailableJobs = () => {
         {sortedJobs.length === 0 ? (
           <p>No jobs are open yet!</p>
         ) : (
-          sortedJobs.map((job) => (
+          currentJobs.map((job) => (
             <div key={job._id} className="job-entry">
               <div className="job-header">
                 {job.jobType && <span className="job-tag">{job.jobType}</span>}
@@ -211,6 +223,20 @@ const AvailableJobs = () => {
           ))
         )}
       </div>
+
+      {totalPages > 1 && (
+        <div className="pagination-container">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              className={`page-button ${currentPage === index + 1 ? 'active' : ''}`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
 
       {jobIdToDelete && (
         <div className="deletion-confirm-overlay">
