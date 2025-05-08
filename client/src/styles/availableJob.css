@@ -139,6 +139,22 @@
   color: white;
 }
 
+/* ==================================== Apply to a job ====================================*/
+
+.apply-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.apply-button:hover {
+  background-color: #0056b3;
+}
+
 /* ==================================== Filter Container ====================================*/
 .filter-container{
   width: 100%;

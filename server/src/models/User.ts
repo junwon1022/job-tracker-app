@@ -19,6 +19,7 @@ interface IUser extends Document {
     friends: string[];
     friendRequests: string[];
     createdAt: Date;
+    appliedJobs: string[];
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -39,6 +40,11 @@ const UserSchema = new mongoose.Schema<IUser>({
     friendCode: { type: String, unique: true},
     friends: { type: [String], default: [] },
     friendRequests: { type: [String], default: [] },
+    appliedJobs: {
+      type: [String],
+      ref: "Job",
+      default: [],
+    },
     createdAt: { type: Date, default: Date.now },
 });
 

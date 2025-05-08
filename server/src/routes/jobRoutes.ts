@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import authMiddleware from "../middleware/authMiddleware";
 import Job from "../models/Job";
+import UserModel from "../models/User";
 
 const router = Router();
 
@@ -71,5 +72,63 @@ router.delete("/:id", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
+// POST /jobs/apply
+router.post("/apply", authMiddleware, async (req: Request, res: Response): Promise<void> => {
+  const { jobId } = req.body;
+  const userId = (req as any).user.id;
+
+  if (!jobId) {
+    res.status(400).json({ message: "Job ID is required" });
+    return;
+  }
+
+  try {
+    const job = await Job.findById(jobId);
+    if (!job) {
+      res.status(404).json({ message: "Job not found" });
+      return;
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return
+    }
+
+    if (user.appliedJobs.includes(jobId)) {
+      res.status(400).json({ message: "Already applied to this job" });
+      return;
+    }
+
+    user.appliedJobs.push(jobId);
+    await user.save();
+
+    res.status(200).json({ message: "Job applied successfully" });
+  } catch (err: any) {
+    console.error("Apply error:", err.message);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+
+// GET /jobs/applied
+router.get("/applied", authMiddleware, async (req: Request, res: Response): Promise<void> => {
+  const userId = (req as any).user.id;
+  console.log("📥 Fetching applied jobs for user:", userId);
+
+  try {
+    const user = await UserModel.findById(userId).populate("appliedJobs");
+    if (!user) {
+      console.warn("⚠️ User not found in DB");
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.status(200).json(user.appliedJobs);
+  } catch (err: any) {
+    console.error("❌ Error in /applied:", err.message);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
 
 export default router;
