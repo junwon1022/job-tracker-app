@@ -19,16 +19,20 @@
 /* ==================================== Job List & Entries ====================================*/
 
 .job-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 fixed columns */
   gap: 1.5rem;
   padding: 1rem;
+  width: 800px;
+  height: 600px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
 }
 
 .job-entry {
-  width: 100%;
-  max-width: 48%;
+  height: 220px;     
+  max-width: 320px;
   background: #ffffff;
   border: 1px solid #dedede;
   border-left: 4px solid #00be5f;
@@ -36,8 +40,11 @@
   padding: 1.5rem;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
 
 @media (max-width: 768px) {
   .job-entry {
@@ -76,6 +83,7 @@
 
 .add-job-modal {
   background: white;
+  margin-top: 50px;
   padding: 2rem;
   width: 90%;
   max-width: 600px;
@@ -129,6 +137,22 @@
 .cancel-button {
   background-color: red;
   color: white;
+}
+
+/* ==================================== Apply to a job ====================================*/
+
+.apply-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.apply-button:hover {
+  background-color: #0056b3;
 }
 
 /* ==================================== Filter Container ====================================*/
@@ -243,4 +267,28 @@
 
 .filter-container {
   width: auto;
+}
+
+
+/* ==================================== Pagination ====================================*/
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 0.5rem;
+}
+
+.page-button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.page-button.active {
+  background-color: #00be5f;
+  color: white;
+  border-color: #00be5f;
 }
